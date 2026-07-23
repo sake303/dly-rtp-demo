@@ -1,0 +1,176 @@
+{
+  "meta": {
+    "prototype": true,
+    "validated": false,
+    "decisionOwner": "Qualified staff"
+  },
+  "performanceSystem": {
+    "scenarioId": "rtp-progression-context-01",
+    "illustrative": true,
+    "source": "SYNTHETIC PERFORMANCE DATA",
+    "activity": {
+      "id": "activity-rtp-04",
+      "label": "Illustrative training session",
+      "date": "20 MAY · ILLUSTRATIVE",
+      "startTime": "10:00",
+      "endTime": "11:15",
+      "totalMinutes": 75
+    },
+    "period": {
+      "id": "period-controlled-4v4",
+      "label": "Controlled 4v4",
+      "context": "PREVIOUS EXPOSURE"
+    },
+    "athlete": {
+      "id": "athlete-17",
+      "label": "ATHLETE 17 · ILLUSTRATIVE",
+      "number": 17,
+      "position": "GUARD"
+    },
+    "athletes": [13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
+    "dashboardTabs": [
+      "Overview",
+      "Daily report",
+      "Drill report",
+      "Individual",
+      "Load",
+      "Session report"
+    ],
+    "periods": [
+      {
+        "id": "warm-up",
+        "label": "Warm up",
+        "startTime": "10:00",
+        "endTime": "10:15",
+        "durationMinutes": 15,
+        "totalDistanceM": 620,
+        "highSpeedDistanceM": 36,
+        "peakSpeedMS": 5.8
+      },
+      {
+        "id": "controlled-4v4",
+        "label": "Controlled 4v4",
+        "startTime": "10:15",
+        "endTime": "10:40",
+        "durationMinutes": 25,
+        "totalDistanceM": 1680,
+        "highSpeedDistanceM": 162,
+        "peakSpeedMS": 7.1
+      },
+      {
+        "id": "shooting",
+        "label": "Shooting",
+        "startTime": "10:40",
+        "endTime": "11:00",
+        "durationMinutes": 20,
+        "totalDistanceM": 970,
+        "highSpeedDistanceM": 54,
+        "peakSpeedMS": 6.4
+      },
+      {
+        "id": "conditioning",
+        "label": "Conditioning",
+        "startTime": "11:00",
+        "endTime": "11:15",
+        "durationMinutes": 15,
+        "totalDistanceM": 1420,
+        "highSpeedDistanceM": 128,
+        "peakSpeedMS": 7
+      }
+    ],
+    "previousExposure": {
+      "evidenceId": "previous-exposure",
+      "label": "4v4 progression completed"
+    },
+    "plannedExposure": {
+      "evidenceId": "planned-exposure",
+      "label": "Controlled 5v5 · 18 minutes"
+    },
+    "workloadWidgets": [
+      {
+        "id": "session-format",
+        "label": "Session format",
+        "value": "4v4",
+        "unit": null,
+        "source": "RECORDED",
+        "illustrative": true
+      },
+      {
+        "id": "exposure-duration",
+        "label": "Exposure duration",
+        "value": 16,
+        "unit": "min",
+        "source": "RECORDED",
+        "illustrative": true
+      },
+      {
+        "id": "next-exposure",
+        "label": "Next planned exposure",
+        "value": "Controlled 5v5",
+        "unit": "18 min",
+        "source": "PLANNED",
+        "illustrative": true
+      }
+    ],
+    "notification": {
+      "id": "progression-context-update",
+      "availableAt": 1,
+      "label": "DLY · CONTEXT UPDATE",
+      "summary": "New context may affect the next planned exposure.",
+      "actionLabel": "Review progression context",
+      "reviewEvidenceIds": [
+        "recent-response",
+        "confidence",
+        "staff-observation"
+      ]
+    }
+  },
+  "scenario": {
+    "id": "rtp-progression-context-01",
+    "athlete": "ATHLETE 17 · ILLUSTRATIVE",
+    "previousExposure": "4v4 progression completed",
+    "plannedExposure": "Controlled 5v5 · 18 minutes",
+    "evidence": [
+      {
+        "id": "previous-exposure",
+        "label": "Previous exposure",
+        "detail": "Completed as planned.",
+        "status": "MET",
+        "source": "RECORDED",
+        "availableAt": 0
+      },
+      {
+        "id": "planned-exposure",
+        "label": "Next planned exposure",
+        "detail": "Controlled 5v5 · 18 minutes.",
+        "status": "MET",
+        "source": "PLANNED",
+        "availableAt": 0
+      },
+      {
+        "id": "recent-response",
+        "label": "Delayed response",
+        "detail": "Next-morning soreness was above the athlete’s usual report.",
+        "status": "NOT MET",
+        "source": "ATHLETE REPORTED",
+        "availableAt": 1
+      },
+      {
+        "id": "confidence",
+        "label": "Athlete confidence",
+        "detail": "No current response recorded.",
+        "status": "MISSING",
+        "source": "NOT AVAILABLE",
+        "availableAt": 2
+      },
+      {
+        "id": "staff-observation",
+        "label": "Late-session movement",
+        "detail": "Staff observations differ across the final activity block.",
+        "status": "CONFLICTING",
+        "source": "STAFF OBSERVED",
+        "availableAt": 2
+      }
+    ]
+  }
+}
