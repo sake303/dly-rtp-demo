@@ -174,6 +174,120 @@
       box-shadow: var(--console-shadow);
     }
 
+    .context-notification {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--console-space-6);
+      margin-bottom: var(--console-space-5);
+      padding: var(--console-space-4) var(--console-space-5);
+      border: 1px solid var(--console-line);
+      color: var(--console-muted);
+      background: rgb(255 255 255 / 72%);
+      font-family: var(--mono);
+      font-size: var(--console-type-mobile);
+      line-height: 1.45;
+    }
+
+    .context-notification[hidden] { display: none; }
+
+    .context-notification button {
+      min-height: 36px;
+      flex: 0 0 auto;
+      padding: 0 var(--console-space-5);
+      border-color: var(--console-line-strong);
+      color: var(--console-ink);
+      background: var(--console-panel);
+      font-family: var(--mono);
+      font-size: var(--console-type-sm);
+      font-weight: 600;
+      letter-spacing: .03em;
+    }
+
+    .review-overlay {
+      display: grid;
+      position: fixed;
+      z-index: 40;
+      inset: 0;
+      justify-items: end;
+      background: rgb(3 12 20 / 58%);
+    }
+
+    .review-overlay[hidden] { display: none; }
+
+    .review-dialog {
+      display: grid;
+      width: min(720px, 54vw);
+      min-width: 560px;
+      height: 100dvh;
+      min-height: 0;
+      max-height: 100dvh;
+      grid-template-rows: auto minmax(0, 1fr);
+      border-left: 1px solid var(--line-strong);
+      color: var(--text);
+      background: var(--bg);
+      box-shadow: -28px 0 80px rgb(0 0 0 / 42%);
+      color-scheme: dark;
+    }
+
+    .review-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 20px var(--gutter);
+      border-bottom: 1px solid var(--line-strong);
+      background: var(--surface-overlay);
+    }
+
+    .review-header div { min-width: 0; }
+
+    .review-header .micro { margin: 0 0 4px; color: var(--muted); }
+
+    .review-header h2 {
+      margin: 0;
+      font-size: clamp(1.35rem, 2.4vw, 2rem);
+      font-weight: 620;
+      letter-spacing: -.035em;
+    }
+
+    .review-close {
+      min-width: 88px;
+      flex: 0 0 auto;
+      padding: 0 16px;
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .review-scroll {
+      min-height: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: 28px var(--gutter) 52px;
+    }
+
+    .review-scroll .scenario-meta { margin-top: 0; }
+    .review-scroll .comparison { grid-template-columns: 1fr; }
+    .review-scroll .scene-panel { min-height: auto; }
+    .review-scroll .scene-panel + .scene-panel {
+      border-top: 1px solid var(--line-strong);
+      border-left: 0;
+    }
+    .review-scroll .evidence-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .review-scroll .evidence-card,
+    .review-scroll .evidence-card:nth-child(1),
+    .review-scroll .evidence-card:nth-child(2) { grid-column: auto; }
+    .review-scroll .decision-frame { grid-template-columns: 1fr; }
+    .review-scroll .decision-copy {
+      border-right: 0;
+      border-bottom: 1px solid var(--line-strong);
+    }
+
+    .is-modal-background { pointer-events: none; }
+
     .console-topbar {
       display: grid;
       min-height: var(--console-topbar-height);
@@ -1510,6 +1624,20 @@
         border-left: 0;
         border-radius: 0;
       }
+      .context-notification {
+        display: grid;
+        margin: 0 var(--console-space-3) var(--console-space-3);
+      }
+      .context-notification[hidden] { display: none; }
+      .context-notification button { width: 100%; }
+      .review-dialog {
+        width: 100%;
+        min-width: 0;
+        border-left: 0;
+      }
+      .review-header { padding: 16px 20px; }
+      .review-scroll { padding: 24px 20px 44px; }
+      .review-scroll .evidence-grid { grid-template-columns: 1fr; }
       .console-topbar {
         grid-template-columns: auto minmax(0, 1fr);
         min-height: var(--console-topbar-height);
@@ -1622,10 +1750,6 @@
   </style>
 </head>
 <body data-step="0" data-show-sources="false">
-  <section class="shell performance-system" id="performance-system" aria-label="Illustrative performance-system view" aria-busy="true">
-    <p class="loading-error">Loading illustrative performance-system view…</p>
-  </section>
-
   <header class="shell hero">
     <p class="eyebrow">DLY / RTP PROGRESSION CONTEXT / ILLUSTRATIVE PROTOTYPE</p>
     <h1>What context could <em>change</em> the next exposure?</h1>
@@ -1643,9 +1767,15 @@
     </div>
   </div>
 
+  <section class="shell performance-system" id="performance-system" tabindex="-1" aria-label="Illustrative performance-system view" aria-busy="true">
+    <p class="loading-error">Loading illustrative performance-system view…</p>
+  </section>
+
   <main class="shell" id="app" aria-busy="true">
     <p class="loading-error">Loading illustrative scenario…</p>
   </main>
+
+  <div class="review-overlay" id="review-root" hidden></div>
 
   <div class="sr-only" aria-live="polite" aria-atomic="true" id="live-region"></div>
 
@@ -1657,6 +1787,7 @@
       const STEP_THRESHOLDS = [0, 0.3, 0.6, 0.86];
       const PLAYBACK_MS = 7000;
       const STATUS_SYMBOLS = { "MET": "✓", "NOT MET": "—", "MISSING": "○", "CONFLICTING": "∕" };
+      const FOCUSABLE_SELECTOR = 'a[href], button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), summary, [contenteditable]:not([contenteditable="false"]), [tabindex]:not([tabindex="-1"])';
       const HEADLINE_STATES = [
         ["Plan prepared", "The available plan appears straightforward."],
         ["Review required", "A delayed response is now part of the decision context."],
@@ -1670,7 +1801,8 @@
         isPlaying: false,
         showSources: false,
         selectedDecision: null,
-        methodsOpen: false
+        methodsOpen: false,
+        isReviewOpen: false
       };
 
       let data = null;
@@ -1680,8 +1812,14 @@
       let lastRenderedStep = null;
       let lastSelectedDecision;
       let lastNavigationMode = "initial";
+      let reviewReturnTarget = null;
+      let scrollLockState = null;
+      let blockedBackgroundState = [];
+      let backgroundObserver = null;
+      let reviewFocusFrame = 0;
 
       const app = document.getElementById("app");
+      const reviewRoot = document.getElementById("review-root");
       const performanceSystemRoot = document.getElementById("performance-system");
       const playButton = document.getElementById("play-button");
       const previousButton = document.getElementById("previous-button");
@@ -1746,6 +1884,10 @@
         }
 
         performanceSystemRoot.innerHTML = `
+          <aside class="context-notification" id="context-notification" tabindex="-1" aria-live="polite" hidden>
+            <span id="context-notification-count"></span>
+            <button id="review-context-button" type="button">${escapeText(system.notification.actionLabel)}</button>
+          </aside>
           <div class="performance-frame">
             <header class="console-topbar">
               <p class="console-brand">Performance console</p>
@@ -1911,31 +2053,6 @@
 
       function buildSurface() {
         app.innerHTML = `
-          <div class="scenario-meta">
-            <span id="athlete-label"></span>
-            <span>Decision owner / <b id="decision-owner"></b></span>
-          </div>
-
-          <section class="comparison" aria-label="Plan and context comparison">
-            <article class="scene-panel">
-              <span class="panel-number" aria-hidden="true">01</span>
-              <p class="micro">Existing plan</p>
-              <h2>The plan on paper</h2>
-              <dl class="plan-block">
-                <div><dt>Previous exposure</dt><dd id="previous-exposure"></dd></div>
-                <div><dt>Next planned exposure</dt><dd id="planned-exposure"></dd></div>
-              </dl>
-              <p class="headline-state"><b id="headline-title"></b><span id="headline-detail"></span></p>
-            </article>
-
-            <article class="scene-panel">
-              <span class="panel-number" aria-hidden="true">02</span>
-              <p class="micro">Decision context</p>
-              <h2>The context around it</h2>
-              <ul class="context-list" id="context-list"></ul>
-            </article>
-          </section>
-
           <section class="timeline-section" aria-labelledby="timeline-title">
             <div class="section-heading">
               <h2 id="timeline-title">Context arrives over time.</h2>
@@ -1951,31 +2068,6 @@
             </div>
           </section>
 
-          <section class="evidence-section" id="evidence-section" aria-labelledby="evidence-title">
-            <div class="section-heading">
-              <h2 id="evidence-title">Evidence that should not cancel itself out</h2>
-              <p>Each status remains independent. Favorable context never erases what is missing or conflicting.</p>
-            </div>
-            <div class="evidence-grid" id="evidence-grid"></div>
-          </section>
-
-          <section class="decision-section" id="decision-section" aria-labelledby="decision-title" hidden>
-            <div class="decision-frame">
-              <div class="decision-copy">
-                <p class="micro">Human-in-the-loop</p>
-                <h2 id="decision-title">The evidence stops here.</h2>
-                <p>Qualified staff makes the final decision.</p>
-              </div>
-              <div class="decision-surface">
-                <output class="decision-state" id="decision-state">STAFF DECISION — NOT SET</output>
-                <div class="decision-buttons" aria-label="Staff decision">
-                  ${["progress", "hold", "modify"].map(option => `<button class="decision-button" type="button" data-decision="${option}" aria-pressed="false">${option.toUpperCase()}</button>`).join("")}
-                </div>
-                <button class="clear-button" id="clear-button" type="button" disabled>Clear selection</button>
-              </div>
-            </div>
-          </section>
-
           <details class="methods" id="methods">
             <summary>Methods / limits</summary>
             <div class="methods-content">
@@ -1987,6 +2079,70 @@
           <footer>Illustrative workflow only. Not medical advice, clearance, injury prediction, or a return-to-play recommendation.</footer>
         `;
 
+        reviewRoot.innerHTML = `
+          <section class="review-dialog" id="review-host" role="dialog" aria-modal="true" aria-labelledby="review-title" tabindex="-1">
+            <header class="review-header">
+              <div>
+                <p class="micro">DLY / Progression context</p>
+                <h2 id="review-title">Review progression context</h2>
+              </div>
+              <button class="review-close" id="close-review-button" type="button">Close review</button>
+            </header>
+
+            <div class="review-scroll">
+              <div class="scenario-meta">
+                <span id="athlete-label"></span>
+                <span>Decision owner / <b id="decision-owner"></b></span>
+              </div>
+
+              <section class="comparison" aria-label="Plan and context comparison">
+                <article class="scene-panel">
+                  <span class="panel-number" aria-hidden="true">01</span>
+                  <p class="micro">Existing plan</p>
+                  <h2>The plan on paper</h2>
+                  <dl class="plan-block">
+                    <div><dt>Previous exposure</dt><dd id="previous-exposure"></dd></div>
+                    <div><dt>Next planned exposure</dt><dd id="planned-exposure"></dd></div>
+                  </dl>
+                  <p class="headline-state"><b id="headline-title"></b><span id="headline-detail"></span></p>
+                </article>
+
+                <article class="scene-panel">
+                  <span class="panel-number" aria-hidden="true">02</span>
+                  <p class="micro">Decision context</p>
+                  <h2>The context around it</h2>
+                  <ul class="context-list" id="context-list"></ul>
+                </article>
+              </section>
+
+              <section class="evidence-section" id="evidence-section" aria-labelledby="evidence-title">
+                <div class="section-heading">
+                  <h2 id="evidence-title">Evidence that should not cancel itself out</h2>
+                  <p>Each status remains independent. Favorable context never erases what is missing or conflicting.</p>
+                </div>
+                <div class="evidence-grid" id="evidence-grid"></div>
+              </section>
+
+              <section class="decision-section" id="decision-section" aria-labelledby="decision-title" hidden>
+                <div class="decision-frame">
+                  <div class="decision-copy">
+                    <p class="micro">Human-in-the-loop</p>
+                    <h2 id="decision-title">The evidence stops here.</h2>
+                    <p>Qualified staff makes the final decision.</p>
+                  </div>
+                  <div class="decision-surface">
+                    <output class="decision-state" id="decision-state">STAFF DECISION — NOT SET</output>
+                    <div class="decision-buttons" aria-label="Staff decision">
+                      ${["progress", "hold", "modify"].map(option => `<button class="decision-button" type="button" data-decision="${option}" aria-pressed="false">${option.toUpperCase()}</button>`).join("")}
+                    </div>
+                    <button class="clear-button" id="clear-button" type="button" disabled>Clear selection</button>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </section>
+        `;
+
         document.getElementById("athlete-label").textContent = data.scenario.athlete;
         document.getElementById("decision-owner").textContent = data.meta.decisionOwner;
         document.getElementById("previous-exposure").textContent = data.scenario.previousExposure;
@@ -1995,9 +2151,215 @@
         wireSurfaceEvents();
       }
 
+      function getFocusableElements(root) {
+        const elements = root.matches(FOCUSABLE_SELECTOR) ? [root] : [];
+        elements.push(...root.querySelectorAll(FOCUSABLE_SELECTOR));
+        return elements;
+      }
+
+      function getReviewFocusableElements() {
+        return getFocusableElements(reviewRoot).filter(element => element.getClientRects().length > 0);
+      }
+
+      function shouldBlockBackgroundElement(element) {
+        return element.parentElement === document.body &&
+          element !== reviewRoot &&
+          element !== liveRegion &&
+          element.tagName !== "SCRIPT";
+      }
+
+      function blockBackgroundElement(element) {
+        if (!shouldBlockBackgroundElement(element) || blockedBackgroundState.some(entry => entry.element === element)) return;
+
+        const entry = {
+          element,
+          inert: element.inert,
+          ariaHidden: element.getAttribute("aria-hidden"),
+          usesNativeInert: "inert" in element,
+          focusableStates: []
+        };
+        blockedBackgroundState.push(entry);
+
+        element.classList.add("is-modal-background");
+        if (entry.usesNativeInert) {
+          element.inert = true;
+        } else {
+          element.setAttribute("aria-hidden", "true");
+          suppressFallbackFocusableElements(element, entry);
+        }
+      }
+
+      function suppressFallbackFocusableElements(root, entry) {
+        getFocusableElements(root).forEach(element => {
+          if (entry.focusableStates.some(state => state.element === element)) return;
+          entry.focusableStates.push({
+            element,
+            tabIndex: element.getAttribute("tabindex")
+          });
+          element.setAttribute("tabindex", "-1");
+        });
+      }
+
+      function blockBackground() {
+        [...document.body.children].forEach(blockBackgroundElement);
+        backgroundObserver = new MutationObserver(records => {
+          records.forEach(record => {
+            record.addedNodes.forEach(node => {
+              if (!(node instanceof Element)) return;
+              blockBackgroundElement(node);
+              const backgroundRoot = node.closest(".is-modal-background");
+              const entry = blockedBackgroundState.find(state => state.element === backgroundRoot);
+              if (entry && !entry.usesNativeInert) suppressFallbackFocusableElements(node, entry);
+            });
+          });
+        });
+        backgroundObserver.observe(document.body, { childList: true, subtree: true });
+      }
+
+      function unblockBackground() {
+        backgroundObserver?.disconnect();
+        backgroundObserver = null;
+        blockedBackgroundState.forEach(({ element, inert, ariaHidden, usesNativeInert, focusableStates }) => {
+          element.classList.remove("is-modal-background");
+          if (usesNativeInert) {
+            element.inert = inert;
+          } else {
+            focusableStates.forEach(({ element: focusable, tabIndex }) => {
+              if (tabIndex === null) {
+                focusable.removeAttribute("tabindex");
+              } else {
+                focusable.setAttribute("tabindex", tabIndex);
+              }
+            });
+          }
+          if (ariaHidden === null) {
+            element.removeAttribute("aria-hidden");
+          } else {
+            element.setAttribute("aria-hidden", ariaHidden);
+          }
+        });
+        blockedBackgroundState = [];
+      }
+
+      function lockPageScroll() {
+        const bodyStyle = document.body.style;
+        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+        scrollLockState = {
+          x: window.scrollX,
+          y: window.scrollY,
+          overflow: bodyStyle.overflow,
+          position: bodyStyle.position,
+          top: bodyStyle.top,
+          left: bodyStyle.left,
+          width: bodyStyle.width,
+          paddingRight: bodyStyle.paddingRight,
+          scrollBehavior: document.documentElement.style.scrollBehavior
+        };
+
+        bodyStyle.overflow = "hidden";
+        bodyStyle.position = "fixed";
+        bodyStyle.top = `-${scrollLockState.y}px`;
+        bodyStyle.left = `-${scrollLockState.x}px`;
+        bodyStyle.width = "100%";
+        if (scrollbarWidth > 0) bodyStyle.paddingRight = `${scrollbarWidth}px`;
+      }
+
+      function unlockPageScroll() {
+        if (!scrollLockState) return;
+        const bodyStyle = document.body.style;
+        const { x, y, overflow, position, top, left, width, paddingRight, scrollBehavior } = scrollLockState;
+
+        bodyStyle.overflow = overflow;
+        bodyStyle.position = position;
+        bodyStyle.top = top;
+        bodyStyle.left = left;
+        bodyStyle.width = width;
+        bodyStyle.paddingRight = paddingRight;
+        document.documentElement.style.scrollBehavior = "auto";
+        window.scrollTo(x, y);
+        document.documentElement.style.scrollBehavior = scrollBehavior;
+        scrollLockState = null;
+      }
+
+      function openReview(trigger) {
+        const notification = document.getElementById("context-notification");
+        if (state.isReviewOpen || !notification || notification.hidden) return;
+
+        reviewReturnTarget = trigger;
+        state.isReviewOpen = true;
+        reviewRoot.hidden = false;
+        document.body.dataset.reviewOpen = "true";
+        blockBackground();
+        lockPageScroll();
+        liveRegion.textContent = "Progression context review opened.";
+
+        reviewFocusFrame = requestAnimationFrame(() => {
+          reviewFocusFrame = 0;
+          if (!state.isReviewOpen || reviewRoot.hidden) return;
+          document.getElementById("close-review-button").focus({ preventScroll: true });
+        });
+      }
+
+      function closeReview({ restoreFocus = true } = {}) {
+        if (!state.isReviewOpen) return;
+
+        if (reviewFocusFrame) cancelAnimationFrame(reviewFocusFrame);
+        reviewFocusFrame = 0;
+        state.isReviewOpen = false;
+        reviewRoot.hidden = true;
+        delete document.body.dataset.reviewOpen;
+        unblockBackground();
+        unlockPageScroll();
+        liveRegion.textContent = "Progression context review closed.";
+
+        const notificationFallback = document.getElementById("context-notification");
+        const focusTarget = reviewReturnTarget && reviewReturnTarget.isConnected && reviewReturnTarget.getClientRects().length > 0
+          ? reviewReturnTarget
+          : notificationFallback && !notificationFallback.hidden && notificationFallback.getClientRects().length > 0
+            ? notificationFallback
+            : performanceSystemRoot;
+        reviewReturnTarget = null;
+        if (restoreFocus) focusTarget.focus({ preventScroll: true });
+      }
+
+      function handleReviewKeydown(event) {
+        if (!state.isReviewOpen) return;
+        if (event.key === "Escape") {
+          event.preventDefault();
+          closeReview();
+          return;
+        }
+        if (event.key !== "Tab") return;
+
+        const focusable = getReviewFocusableElements();
+        if (focusable.length === 0) {
+          event.preventDefault();
+          document.getElementById("review-host").focus({ preventScroll: true });
+          return;
+        }
+
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
+
+      function handleReviewFocusIn(event) {
+        if (!state.isReviewOpen || reviewRoot.contains(event.target)) return;
+        const focusTarget = getReviewFocusableElements()[0] || document.getElementById("review-host");
+        focusTarget.focus({ preventScroll: true });
+      }
+
       function wireSurfaceEvents() {
         const timeline = document.getElementById("timeline");
         const methods = document.getElementById("methods");
+        const reviewButton = document.getElementById("review-context-button");
+        const closeReviewButton = document.getElementById("close-review-button");
         let scrubbing = false;
 
         const setFromPointer = event => {
@@ -2037,6 +2399,10 @@
         });
 
         document.getElementById("clear-button").addEventListener("click", clearDecision);
+        reviewButton.addEventListener("click", () => openReview(reviewButton));
+        closeReviewButton.addEventListener("click", () => closeReview());
+        document.addEventListener("keydown", handleReviewKeydown);
+        document.addEventListener("focusin", handleReviewFocusIn);
 
         methods.addEventListener("toggle", () => {
           state.methodsOpen = methods.open;
@@ -2055,6 +2421,27 @@
             <span class="source-slot"><span class="source-chip">${escapeText(item.source)}</span></span>
           </article>
         `;
+      }
+
+      function getReviewableEvidence() {
+        const reviewIds = new Set(data.performanceSystem.notification.reviewEvidenceIds);
+        return data.scenario.evidence.filter(item => reviewIds.has(item.id) && item.availableAt <= state.step);
+      }
+
+      function renderNotification() {
+        const notification = document.getElementById("context-notification");
+        const countLabel = document.getElementById("context-notification-count");
+        const reviewButton = document.getElementById("review-context-button");
+        if (!notification || !countLabel || !reviewButton) return;
+
+        const count = getReviewableEvidence().length;
+        const isAvailable = state.step >= data.performanceSystem.notification.availableAt;
+        const isVisible = isAvailable && count > 0 && state.selectedDecision === null;
+        const contextLabel = `${count} reviewable context item${count === 1 ? "" : "s"}`;
+
+        notification.hidden = !isVisible;
+        countLabel.textContent = contextLabel;
+        reviewButton.setAttribute("aria-label", `${data.performanceSystem.notification.actionLabel}. ${contextLabel}.`);
       }
 
       function renderStep(previousStep) {
@@ -2126,6 +2513,7 @@
         nextButton.disabled = state.step === 3 || state.isPlaying;
         stepCount.textContent = `Step 0${state.step + 1} / 04`;
         stepName.textContent = STEP_NAMES[state.step];
+        renderNotification();
 
         const timeline = document.getElementById("timeline");
         if (timeline) {
@@ -2204,16 +2592,23 @@
       function setStep(nextStep, mode) {
         stopPlayback();
         lastNavigationMode = mode;
-        state.step = clamp(nextStep, 0, 3);
+        const resolvedStep = clamp(nextStep, 0, 3);
+        const closesReview = state.isReviewOpen && resolvedStep < data.performanceSystem.notification.availableAt;
+        if (closesReview) closeReview({ restoreFocus: false });
+        state.step = resolvedStep;
         if (state.step < 3) state.selectedDecision = null;
+        if (state.step < data.performanceSystem.notification.availableAt) state.showSources = false;
         state.progress = state.step / 3;
         liveRegion.textContent = `${STEP_NAMES[state.step]}. Step ${state.step + 1} of 4.`;
         render();
+        if (closesReview) performanceSystemRoot.focus({ preventScroll: true });
       }
 
       function resetState(announce = true) {
         stopPlayback();
         lastNavigationMode = "reset";
+        const closesReview = state.isReviewOpen;
+        if (closesReview) closeReview({ restoreFocus: false });
         state.step = 0;
         state.progress = 0;
         state.isPlaying = false;
@@ -2224,6 +2619,7 @@
         if (methods) methods.open = false;
         if (announce) liveRegion.textContent = "Scenario reset to last exposure.";
         render();
+        if (closesReview) performanceSystemRoot.focus({ preventScroll: true });
       }
 
       function selectDecision(decision) {
@@ -2255,6 +2651,7 @@
       resetButton.addEventListener("click", () => resetState(true));
 
       document.addEventListener("keydown", event => {
+        if (state.isReviewOpen) return;
         if (event.code !== "Space" || event.repeat) return;
         if (event.target.closest("button, summary, a, input, textarea, select")) return;
         event.preventDefault();
