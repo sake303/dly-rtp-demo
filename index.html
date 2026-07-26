@@ -160,6 +160,7 @@
       --console-mobile-icon-size: 27px;
       --console-mobile-source-offset: 38px;
       --console-mobile-section-end: 22px;
+      position: relative;
       padding-block: var(--console-space-6) var(--console-space-8);
       border-bottom: 1px solid var(--line-strong);
       color: var(--console-ink);
@@ -176,14 +177,20 @@
 
     .context-notification {
       display: flex;
+      position: absolute;
+      z-index: 3;
+      top: calc(var(--console-space-6) + var(--console-topbar-height) + var(--console-space-5));
+      right: calc(var(--gutter) + var(--console-space-5));
       align-items: center;
       justify-content: space-between;
       gap: var(--console-space-6);
-      margin-bottom: var(--console-space-5);
+      width: min(440px, calc(100% - (var(--gutter) * 2) - (var(--console-space-5) * 2)));
       padding: var(--console-space-4) var(--console-space-5);
       border: 1px solid var(--console-line);
       color: var(--console-muted);
-      background: rgb(255 255 255 / 72%);
+      background: rgb(255 255 255 / 92%);
+      box-shadow: 0 8px 24px rgb(22 27 33 / 12%);
+      backdrop-filter: blur(10px);
       font-family: var(--mono);
       font-size: var(--console-type-mobile);
       line-height: 1.45;
@@ -1626,7 +1633,10 @@
       }
       .context-notification {
         display: grid;
-        margin: 0 var(--console-space-3) var(--console-space-3);
+        top: calc(var(--console-topbar-height) + var(--console-space-3));
+        right: var(--console-space-3);
+        left: var(--console-space-3);
+        width: auto;
       }
       .context-notification[hidden] { display: none; }
       .context-notification button { width: 100%; }
