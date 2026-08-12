@@ -80,7 +80,7 @@
     ],
     "previousExposure": {
       "evidenceId": "previous-exposure",
-      "label": "4v4 progression completed"
+      "label": "Controlled 4v4 · 16 minutes completed"
     },
     "plannedExposure": {
       "evidenceId": "planned-exposure",
@@ -116,26 +116,25 @@
       "id": "progression-context-update",
       "availableAt": 1,
       "label": "DLY · CONTEXT UPDATE",
-      "summary": "New context may affect the next planned exposure.",
+      "summary": "Team context may affect the next planned exposure.",
       "actionLabel": "Review progression context",
       "reviewEvidenceIds": [
-        "recent-response",
-        "confidence",
-        "staff-observation"
+        "recent-team-exposure",
+        "team-week-context"
       ]
     }
   },
   "scenario": {
     "id": "rtp-progression-context-01",
     "athlete": "ATHLETE 17 · ILLUSTRATIVE",
-    "previousExposure": "4v4 progression completed",
+    "previousExposure": "Controlled 4v4 · 16 minutes completed",
     "plannedExposure": "Controlled 5v5 · 18 minutes",
     "evidence": [
       {
         "id": "previous-exposure",
         "label": "Previous exposure",
-        "detail": "Completed as planned.",
-        "status": "MET",
+        "detail": "Controlled 4v4 · 16 minutes completed as planned.",
+        "status": "COMPLETED",
         "source": "RECORDED",
         "availableAt": 0
       },
@@ -143,32 +142,24 @@
         "id": "planned-exposure",
         "label": "Next planned exposure",
         "detail": "Controlled 5v5 · 18 minutes.",
-        "status": "MET",
+        "status": "PLANNED",
         "source": "PLANNED",
         "availableAt": 0
       },
       {
-        "id": "recent-response",
-        "label": "Delayed response",
-        "detail": "Next-morning soreness was above the athlete’s usual report.",
-        "status": "NOT MET",
-        "source": "ATHLETE REPORTED",
+        "id": "recent-team-exposure",
+        "label": "Recent team exposure",
+        "detail": "The last three team sessions were controlled 4v4, up to 16 minutes.",
+        "status": "RECORDED",
+        "source": "RECORDED",
         "availableAt": 1
       },
       {
-        "id": "confidence",
-        "label": "Athlete confidence",
-        "detail": "No current response recorded.",
-        "status": "MISSING",
-        "source": "NOT AVAILABLE",
-        "availableAt": 2
-      },
-      {
-        "id": "staff-observation",
-        "label": "Late-session movement",
-        "detail": "Staff observations differ across the final activity block.",
-        "status": "CONFLICTING",
-        "source": "STAFF OBSERVED",
+        "id": "team-week-context",
+        "label": "This week’s team context",
+        "detail": "Today’s game-prep session introduces controlled 5v5 as a team requirement.",
+        "status": "SCHEDULED",
+        "source": "TEAM SCHEDULE",
         "availableAt": 2
       }
     ]

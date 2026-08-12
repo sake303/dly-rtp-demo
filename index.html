@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-demo-locales="en ko">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -921,7 +921,6 @@
     .control,
     .status-token,
     .source-chip,
-    .timeline-label,
     .decision-state,
     summary,
     footer {
@@ -943,7 +942,16 @@
       margin: 0 0 clamp(56px, 10vw, 126px);
       color: var(--muted);
       font-size: 10px;
+      white-space: pre-line;
     }
+
+    html[lang="ko"] .eyebrow {
+      font-family: var(--sans);
+      letter-spacing: normal;
+      text-transform: none;
+    }
+
+    html[lang="ko"] .eyebrow:empty { display: none; }
 
     .hero h1 {
       grid-column: 1 / 10;
@@ -955,6 +963,21 @@
       letter-spacing: -.065em;
       line-height: .89;
       text-wrap: balance;
+    }
+
+    html:lang(ko) .hero h1 {
+      line-height: .95;
+      overflow-wrap: normal;
+      word-spacing: .16em;
+      word-break: keep-all;
+    }
+
+    html:lang(ko) .hero h1 em::after {
+      display: none;
+    }
+
+    html:lang(ko) .hero h1 em {
+      color: #8ea4ff;
     }
 
     .hero h1 em {
@@ -993,6 +1016,11 @@
     }
 
     .hero-copy strong { color: var(--text); font-weight: 550; }
+
+    html:lang(ko) .hero-copy {
+      overflow-wrap: normal;
+      word-break: keep-all;
+    }
 
     .controls-wrap {
       position: sticky;
@@ -1178,6 +1206,11 @@
       font-weight: 550;
     }
 
+    html:lang(ko) .headline-state span {
+      overflow-wrap: normal;
+      word-break: keep-all;
+    }
+
     .context-list {
       display: grid;
       gap: 10px;
@@ -1262,8 +1295,6 @@
       transform: none;
     }
 
-    .timeline-section { padding: clamp(48px, 7vw, 84px) 0 30px; }
-
     .section-heading {
       display: flex;
       align-items: baseline;
@@ -1286,93 +1317,6 @@
       color: var(--muted);
       font-size: .9rem;
     }
-
-    .timeline {
-      position: relative;
-      padding: 36px 0 12px;
-      touch-action: none;
-      user-select: none;
-    }
-
-    .timeline-track,
-    .timeline-progress {
-      position: absolute;
-      top: 43px;
-      left: 0;
-      height: 2px;
-    }
-
-    .timeline-track { width: 100%; background: var(--line-strong); }
-
-    .timeline-progress {
-      width: 100%;
-      background: var(--accent);
-      transform: scaleX(var(--progress));
-      transform-origin: left;
-      transition: transform var(--motion-state) var(--ease-enter);
-    }
-
-    .playhead {
-      position: absolute;
-      z-index: 2;
-      top: 35px;
-      left: calc(var(--progress) * 100%);
-      width: 2px;
-      height: 18px;
-      background: var(--accent);
-      transform: translateX(-1px);
-      transition: left var(--motion-state) var(--ease-enter);
-    }
-
-    body[data-playing="true"] .timeline-progress,
-    body[data-playing="true"] .playhead { transition: none; }
-
-    .timeline-points {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .timeline-point { position: relative; padding-top: 38px; }
-
-    .timeline-point::before {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 16px;
-      height: 16px;
-      border: 2px solid var(--line-strong);
-      content: "";
-      background: var(--bg);
-      transform: translateY(-1px);
-      transition:
-        background-color var(--motion-state) var(--ease-ui),
-        border-color var(--motion-state) var(--ease-ui);
-    }
-
-    .timeline-point:last-child { text-align: right; }
-    .timeline-point:last-child::before { right: 0; left: auto; }
-    .timeline-point:nth-child(2), .timeline-point:nth-child(3) { text-align: center; }
-    .timeline-point:nth-child(2)::before, .timeline-point:nth-child(3)::before { left: 50%; transform: translate(-50%, -1px); }
-
-    .timeline-point.is-active::before,
-    .timeline-point.is-past::before {
-      border-color: var(--accent);
-      background: var(--accent);
-    }
-
-    .timeline-label {
-      display: block;
-      color: var(--quiet);
-      font-size: 9px;
-      transition: color var(--motion-state) var(--ease-ui);
-    }
-
-    .timeline-point.is-active .timeline-label { color: var(--text); }
 
     .evidence-section {
       scroll-margin-top: 90px;
@@ -1601,6 +1545,7 @@
         content: "ILLUSTRATIVE";
         font-size: var(--console-type-xs);
       }
+      html:lang(ko) .console-system-state::after { content: "예시"; }
       .console-body { grid-template-columns: 1fr; }
       .athlete-sidebar {
         grid-template-columns: minmax(190px, .8fr) minmax(0, 1.2fr) minmax(150px, .7fr);
@@ -1642,6 +1587,7 @@
       .context-notification button { width: 100%; }
       .review-dialog {
         width: 100%;
+        max-width: 100vw;
         min-width: 0;
         border-left: 0;
       }
@@ -1738,15 +1684,18 @@
       .plan-block div { grid-template-columns: 1fr; gap: 8px; }
       .section-heading { display: block; }
       .section-heading p { margin-top: 16px; }
-      .timeline-section { padding-bottom: 12px; }
-      .timeline-label { max-width: 9ch; line-height: 1.35; }
-      .timeline-point:nth-child(2), .timeline-point:nth-child(3) { text-align: center; }
-      .timeline-point:last-child .timeline-label { margin-left: auto; }
       .evidence-grid { grid-template-columns: 1fr; }
       .evidence-card, .evidence-card:nth-child(1), .evidence-card:nth-child(2) { grid-column: auto; min-height: 190px; }
       .decision-buttons { grid-template-columns: 1fr; }
       .decision-button { min-height: 64px; }
       .methods-content { grid-template-columns: 1fr; }
+    }
+
+    @media (min-width: 621px) and (max-width: 900px) {
+      .review-dialog {
+        width: min(720px, 86vw);
+        min-width: 0;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1761,13 +1710,13 @@
 </head>
 <body data-step="0" data-show-sources="false">
   <header class="shell hero">
-    <p class="eyebrow">DLY / RTP PROGRESSION CONTEXT / ILLUSTRATIVE PROTOTYPE</p>
-    <h1>What context could <em>change</em> the next exposure?</h1>
-    <p class="hero-copy"><strong>DLY brings scattered exposure, response, and staff context into one review surface</strong> before qualified staff decide to progress, hold, or modify.</p>
+    <p class="eyebrow" id="eyebrow">DLY / RTP PROGRESSION CONTEXT / ILLUSTRATIVE PROTOTYPE</p>
+    <h1 id="hero-title">What context could <em>change</em> the next exposure?</h1>
+    <p class="hero-copy" id="hero-copy"><strong>DLY brings scattered exposure, response, and staff context into one review surface</strong> before qualified staff decide to progress, hold, or modify.</p>
   </header>
 
   <div class="controls-wrap">
-    <div class="shell controls" aria-label="Scenario controls">
+    <div class="shell controls" id="scenario-controls" aria-label="Scenario controls">
       <button class="control control--primary" id="play-button" type="button" disabled>▶ Play scenario</button>
       <button class="control" id="previous-button" type="button" disabled>Previous</button>
       <button class="control" id="next-button" type="button" disabled>Next</button>
@@ -1793,16 +1742,65 @@
     (() => {
       "use strict";
 
-      const STEP_NAMES = ["Last exposure", "Delayed response", "Staff review", "Next exposure"];
+      const locale = new URLSearchParams(window.location.search).get("lang") === "ko" ? "ko" : "en";
+      const isKorean = locale === "ko";
+      const COPY = {
+        documentTitle: "DLY · RTP 판단 맥락",
+        documentDescription: "자격을 갖춘 퍼포먼스 스태프를 위한 예시 RTP 진행 판단 맥락 워크플로우입니다.",
+        eyebrow: "",
+        heroTitle: "DLY: 퍼포먼스와 RTP 팀을 위한 Decision Layer",
+        heroCopy: "DLY는 다음 부하를 진행할지, 보류할지, 조정할지 판단할 때 필요한 맥락을 한곳에 모읍니다.",
+        scenarioControls: "시나리오 제어",
+        play: "▶ 시나리오 재생", pause: "Ⅱ 일시 정지", previous: "이전", next: "다음", showSources: "출처 보기", hideSources: "출처 숨기기", reset: "초기화",
+        loadingSystem: "예시 퍼포먼스 시스템 화면을 불러오는 중…", loadingScenario: "예시 시나리오를 불러오는 중…",
+        consoleBrand: "퍼포먼스 콘솔", consoleSections: "퍼포먼스 콘솔 섹션", timeline: "타임라인", download: "다운로드", settings: "설정", updates: "업데이트", illustrativeDisconnected: "예시 / 연결되지 않음",
+        training: "훈련", illustrativeData: "예시 데이터", activityTimeline: "활동 및 구간 타임라인", activity: "활동", minuteUnit: "분", athleteSelector: "선수 선택", athlete: "선수", illustrative: "예시", dashboardTabs: "대시보드 탭",
+        periodDuration: "구간 시간", minutes: "분", totalDistance: "총 이동 거리", metres: "미터", periodMetrics: "구간 지표", recorded: "기록됨", period: "구간", duration: "시간", distance: "이동 거리", highSpeedDistance: "고속 이동 거리", peakSpeed: "최고 속도", activityTotal: "활동 합계", swipeTable: "모든 기록 지표를 보려면 표를 옆으로 밀어보세요",
+        athleteSelection: "선수 선택", searchAthletes: "선수 검색", athletes: "선수", selectedAthlete: "선택된 선수", periods: "구간", source: "출처", filter: "필터", athleteFilter: "선수 필터", allAthletes: "모든 선수", illustrativeSystem: "예시 퍼포먼스 시스템 화면", widget: "위젯", recordedOnly: "기록된 데이터만 표시 / 자동 추천 없음",
+        methods: "방법 / 한계", labelsMeaning: "라벨의 의미.", labelsDetail: "모든 시나리오 데이터는 예시입니다. 출처 라벨은 맥락이 어디서 왔는지를 설명할 뿐, 신뢰성·의학적 타당성·우선순위를 정하지 않습니다.", surfaceDoesNot: "이 화면이 하지 않는 일.", surfaceDoesNotDetail: "화면은 자동 추천을 만들지 않습니다. 자격을 갖춘 스태프가 판단 권한을 유지합니다.",
+        chart: "차트",
+        boundary: "예시 워크플로우일 뿐입니다. 의학적 조언, 출전 허가, 부상 예측 또는 복귀 권고가 아닙니다.", progressionContext: "진행 판단 맥락", reviewContext: "진행 판단 맥락 검토", closeReview: "검토 닫기", decisionOwner: "판단 주체", planContextComparison: "계획과 맥락 비교", existingPlan: "기존 계획", planOnPaper: "문서상 계획", previousExposure: "직전 노출", nextPlannedExposure: "다음 계획 노출", decisionContext: "판단 맥락", contextAround: "계획을 둘러싼 팀 맥락", evidenceIndependent: "함께 검토할 맥락", evidenceIndependentDetail: "이 근거들은 특정 답을 내리지 않습니다. 스태프가 오늘 계획을 검토할 때 함께 봅니다.", humanInLoop: "사람이 최종 판단", evidenceStops: "근거는 여기까지입니다.", staffFinalDecision: "자격을 갖춘 스태프가 최종 판단합니다.", decisionNotSet: "스태프 판단 — 미설정", staffDecision: "스태프 판단", clearSelection: "선택 해제",
+        reviewOpened: "진행 판단 맥락 검토를 열었습니다.", reviewClosed: "진행 판단 맥락 검토를 닫았습니다.", noContext: "계획 화면에는 최근 팀 훈련 또는 이번 주 팀 맥락이 아직 없습니다.", scenarioComplete: "시나리오가 완료되었습니다. 스태프 판단은 아직 설정되지 않았습니다.", scenarioAdvanced: "시나리오가 다음 노출 판단 단계로 이동했습니다. 스태프 판단은 아직 설정되지 않았습니다.", scenarioReset: "시나리오를 직전 노출 단계로 초기화했습니다.", decisionCleared: "스태프 판단 선택을 해제했습니다.", sourcesShown: "근거 출처를 표시했습니다.", sourcesHidden: "근거 출처를 숨겼습니다.", systemLoadError: "예시 퍼포먼스 시스템 화면을 불러올 수 없습니다.", scenarioLoadError: "예시 시나리오를 불러올 수 없습니다. index.html 옆에서 로컬 HTTP 서버를 시작한 뒤 다시 시도하세요.",
+        steps: ["직전 노출", "최근 팀 훈련", "이번 주 팀 맥락", "다음 노출 판단"],
+        headlines: [
+          ["계획 준비됨", "직전 세션과 다음 계획만 보입니다."],
+          ["최근 팀 훈련 확인", "최근 세션도 통제된 4대4 · 16분 수준입니다."],
+          ["팀 맥락 추가", "이번 주 팀 세션 요구도 판단 맥락에 포함됐습니다."],
+          ["스태프 판단 대기", "오늘 5대5 18분으로 한 단계 올릴지 스태프가 판단합니다."]
+        ],
+        statuses: { "COMPLETED": "완료", "PLANNED": "계획됨", "RECORDED": "기록됨", "SCHEDULED": "일정됨" },
+        decisions: { progress: "진행", hold: "유지", modify: "조정" },
+        data: {
+          "Qualified staff": "자격을 갖춘 스태프", "SYNTHETIC PERFORMANCE DATA": "합성 퍼포먼스 데이터",
+          "Illustrative training session": "예시 훈련 세션", "20 MAY · ILLUSTRATIVE": "5월 20일 · 예시",
+          "Controlled 4v4": "통제된 4대4", "PREVIOUS EXPOSURE": "직전 노출", "ATHLETE 17 · ILLUSTRATIVE": "선수 17 · 예시", "GUARD": "가드",
+          "Overview": "개요", "Daily report": "일일 리포트", "Drill report": "드릴 리포트", "Individual": "개인", "Load": "부하", "Session report": "세션 리포트",
+          "Warm up": "워밍업", "Shooting": "슛 훈련", "Conditioning": "컨디셔닝", "Controlled 4v4 · 16 minutes completed": "통제된 4대4 · 16분 완료",
+          "Controlled 5v5 · 18 minutes": "통제된 5대5 · 18분", "Session format": "세션 형식", "Exposure duration": "노출 시간", "Next planned exposure": "다음 계획 노출",
+          "RECORDED": "기록됨", "PLANNED": "계획됨", "TEAM SCHEDULE": "팀 일정", "DLY · CONTEXT UPDATE": "DLY · 맥락 업데이트", "Team context may affect the next planned exposure.": "팀 맥락이 다음 계획 노출에 영향을 줄 수 있습니다.", "Review progression context": "진행 판단 맥락 검토",
+          "Previous exposure": "직전 노출", "Controlled 4v4 · 16 minutes completed as planned.": "통제된 4대4 · 16분을 계획대로 완료했습니다.", "Controlled 5v5 · 18 minutes.": "통제된 5대5 · 18분.",
+          "Recent team exposure": "최근 팀 훈련", "The last three team sessions were controlled 4v4, up to 16 minutes.": "최근 세 번의 팀 훈련도 통제된 4대4 · 최대 16분 수준이었습니다.",
+          "This week’s team context": "이번 주 팀 맥락", "Today’s game-prep session introduces controlled 5v5 as a team requirement.": "오늘 경기 준비 세션에서는 통제된 5대5가 팀 훈련의 요구로 들어옵니다."
+        }
+      };
+      const t = (key, english) => isKorean ? (COPY[key] ?? english) : english;
+      const translatePayload = value => Array.isArray(value)
+        ? value.map(translatePayload)
+        : value && typeof value === "object"
+          ? Object.fromEntries(Object.entries(value).map(([key, item]) => [key, translatePayload(item)]))
+          : isKorean && typeof value === "string" ? (COPY.data[value] ?? value) : value;
+      const statusText = status => isKorean ? (COPY.statuses[status] ?? status) : status;
+      const decisionText = decision => isKorean ? (COPY.decisions[decision] ?? decision) : decision.toUpperCase();
+      const STEP_NAMES = isKorean ? COPY.steps : ["Previous exposure", "Recent team exposure", "This week's team context", "Next exposure decision"];
       const STEP_THRESHOLDS = [0, 0.3, 0.6, 0.86];
       const PLAYBACK_MS = 7000;
-      const STATUS_SYMBOLS = { "MET": "✓", "NOT MET": "—", "MISSING": "○", "CONFLICTING": "∕" };
+      const STATUS_SYMBOLS = { "COMPLETED": "✓", "PLANNED": "·", "RECORDED": "·", "SCHEDULED": "→" };
       const FOCUSABLE_SELECTOR = 'a[href], button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), summary, [contenteditable]:not([contenteditable="false"]), [tabindex]:not([tabindex="-1"])';
-      const HEADLINE_STATES = [
-        ["Plan prepared", "The available plan appears straightforward."],
-        ["Review required", "A delayed response is now part of the decision context."],
-        ["Context assembled", "Missing and conflicting evidence remain visible."],
-        ["Awaiting staff decision", "The evidence is prepared; no option is recommended."]
+      const HEADLINE_STATES = isKorean ? COPY.headlines : [
+        ["Plan prepared", "Only the previous session and next plan are visible."],
+        ["Recent team exposure", "The last three team sessions remained at controlled 4v4, up to 16 minutes."],
+        ["Team context added", "This week's team-session demand is now part of the decision context."],
+        ["Awaiting staff decision", "Staff decides whether to step up to controlled 5v5 for 18 minutes today."]
       ];
 
       const state = {
@@ -1849,6 +1847,27 @@
         return node.innerHTML;
       }
 
+      function applyStaticCopy() {
+        if (!isKorean) return;
+        document.documentElement.lang = "ko";
+        document.title = COPY.documentTitle;
+        document.querySelector('meta[name="description"]').setAttribute("content", COPY.documentDescription);
+        document.getElementById("eyebrow").textContent = COPY.eyebrow;
+        document.getElementById("hero-title").innerHTML = COPY.heroTitle;
+        document.getElementById("hero-copy").innerHTML = COPY.heroCopy;
+        document.getElementById("scenario-controls").setAttribute("aria-label", COPY.scenarioControls);
+        playButton.textContent = COPY.play;
+        previousButton.textContent = COPY.previous;
+        nextButton.textContent = COPY.next;
+        sourcesButton.textContent = COPY.showSources;
+        resetButton.textContent = COPY.reset;
+        stepCount.textContent = "단계 01 / 04";
+        stepName.textContent = STEP_NAMES[0];
+        performanceSystemRoot.setAttribute("aria-label", "예시 퍼포먼스 시스템 화면");
+        performanceSystemRoot.querySelector(".loading-error").textContent = COPY.loadingSystem;
+        app.querySelector(".loading-error").textContent = COPY.loadingScenario;
+      }
+
       function buildPerformanceSystem() {
         const system = data.performanceSystem;
         const periods = system.periods;
@@ -1856,7 +1875,7 @@
         const totalDistance = periods.reduce((sum, period) => sum + period.totalDistanceM, 0);
         const totalHighSpeed = periods.reduce((sum, period) => sum + period.highSpeedDistanceM, 0);
         const peakSpeed = Math.max(...periods.map(period => period.peakSpeedMS));
-        const numberFormatter = new Intl.NumberFormat("en-US");
+        const numberFormatter = new Intl.NumberFormat(isKorean ? "ko-KR" : "en-US");
         const formatNumber = value => numberFormatter.format(value);
 
         function renderMetricChart(title, unit, values, valueFormatter) {
@@ -1864,7 +1883,7 @@
           const axisValues = [1, 0.75, 0.5, 0.25, 0].map(ratio => valueFormatter(maximum * ratio, true));
 
           return `
-            <section class="console-widget" aria-label="${escapeText(title)} chart">
+            <section class="console-widget" aria-label="${escapeText(title)} ${t("chart", "chart")}">
               <div class="widget-heading">
                 <h3>${escapeText(title)}</h3>
                 <span class="widget-tools">${escapeText(unit)}</span>
@@ -1900,14 +1919,14 @@
           </aside>
           <div class="performance-frame">
             <header class="console-topbar">
-              <p class="console-brand">Performance console</p>
-              <nav class="console-nav" aria-label="Performance console sections">
-                <span aria-current="page">Timeline</span>
-                <span>Download</span>
-                <span>Settings</span>
-                <span>Updates</span>
+              <p class="console-brand">${t("consoleBrand", "Performance console")}</p>
+              <nav class="console-nav" aria-label="${t("consoleSections", "Performance console sections")}">
+                <span aria-current="page">${t("timeline", "Timeline")}</span>
+                <span>${t("download", "Download")}</span>
+                <span>${t("settings", "Settings")}</span>
+                <span>${t("updates", "Updates")}</span>
               </nav>
-              <span class="console-system-state">Illustrative / not connected</span>
+              <span class="console-system-state">${t("illustrativeDisconnected", "Illustrative / not connected")}</span>
             </header>
 
             <div class="console-body">
@@ -1917,19 +1936,19 @@
                     <div>
                       <h2 id="activity-title">
                         ${escapeText(system.activity.label)}
-                        <span class="activity-badge">Training</span>
+                        <span class="activity-badge">${t("training", "Training")}</span>
                       </h2>
                       <p>${escapeText(system.activity.date)} · ${escapeText(system.activity.startTime)}–${escapeText(system.activity.endTime)}</p>
                     </div>
                   </div>
-                  <span class="activity-source">Illustrative data</span>
+                  <span class="activity-source">${t("illustrativeData", "Illustrative data")}</span>
                 </section>
 
-                <section class="session-timeline" aria-label="Activity and period timeline">
+                <section class="session-timeline" aria-label="${t("activityTimeline", "Activity and period timeline")}">
                   <div class="session-time-scale" aria-hidden="true">
                     <span>10:00</span><span>10:15</span><span>10:30</span><span>10:45</span><span>11:00</span><span>11:15</span>
                   </div>
-                  <div class="session-activity-bar">Activity · ${totalMinutes} min</div>
+                  <div class="session-activity-bar">${t("activity", "Activity")} · ${totalMinutes}${t("minuteUnit", " min")}</div>
                   <div class="session-periods">
                     ${periods.map(period => `
                       <div
@@ -1943,16 +1962,16 @@
                   </div>
                 </section>
 
-                <section class="mobile-athlete-strip" aria-label="Athlete selector">
+                <section class="mobile-athlete-strip" aria-label="${t("athleteSelector", "Athlete selector")}">
                   <div class="mobile-athlete-list">
                     ${system.athletes.slice(0, 6).map(number => `
                       <span class="athlete-tile" ${number === system.athlete.number ? 'aria-current="true"' : ""}>${number}</span>
                     `).join("")}
                   </div>
-                  <p class="mobile-athlete-meta">Athlete ${system.athlete.number} · ${escapeText(system.athlete.position)} · Illustrative</p>
+                  <p class="mobile-athlete-meta">${t("athlete", "Athlete")} ${system.athlete.number} · ${escapeText(system.athlete.position)} · ${t("illustrative", "Illustrative")}</p>
                 </section>
 
-                <nav class="console-tabs" aria-label="Dashboard tabs">
+                <nav class="console-tabs" aria-label="${t("dashboardTabs", "Dashboard tabs")}">
                   ${system.dashboardTabs.map((tab, index) => `
                     <span class="console-tab" ${index === 0 ? 'aria-current="page"' : ""}>${escapeText(tab)}</span>
                   `).join("")}
@@ -1960,39 +1979,39 @@
 
                 <div class="console-widgets">
                   ${renderMetricChart(
-                    "Period duration",
-                    "MIN",
+                    t("periodDuration", "Period duration"),
+                    t("minutes", "MIN"),
                     periods.map(period => ({ label: period.label, value: period.durationMinutes })),
-                    (value, axis) => axis ? Math.round(value) : `${value} min`
+                    (value, axis) => axis ? Math.round(value) : `${value}${t("minuteUnit", " min")}`
                   )}
                   ${renderMetricChart(
-                    "Total distance",
-                    "METRES",
+                    t("totalDistance", "Total distance"),
+                    t("metres", "METRES"),
                     periods.map(period => ({ label: period.label, value: period.totalDistanceM })),
                     (value, axis) => axis ? formatNumber(Math.round(value)) : `${formatNumber(value)} m`
                   )}
 
                   <section class="console-widget console-widget--table" aria-labelledby="period-table-title">
                     <div class="widget-heading">
-                      <h3 id="period-table-title">Period metrics · Athlete ${system.athlete.number}</h3>
-                      <span class="widget-tools">Recorded</span>
+                      <h3 id="period-table-title">${t("periodMetrics", "Period metrics")} · ${t("athlete", "Athlete")} ${system.athlete.number}</h3>
+                      <span class="widget-tools">${t("recorded", "Recorded")}</span>
                     </div>
                     <div class="console-table-wrap">
                       <table class="console-table">
                         <thead>
                           <tr>
-                            <th scope="col">Period</th>
-                            <th scope="col">Duration</th>
-                            <th scope="col">Distance (m)</th>
-                            <th scope="col">High-speed distance (m)</th>
-                            <th scope="col">Peak speed (m/s)</th>
+                            <th scope="col">${t("period", "Period")}</th>
+                            <th scope="col">${t("duration", "Duration")}</th>
+                            <th scope="col">${t("distance", "Distance")} (m)</th>
+                            <th scope="col">${t("highSpeedDistance", "High-speed distance")} (m)</th>
+                            <th scope="col">${t("peakSpeed", "Peak speed")} (m/s)</th>
                           </tr>
                         </thead>
                         <tbody>
                           ${periods.map(period => `
                             <tr>
                               <th scope="row">${escapeText(period.label)}</th>
-                              <td>${period.durationMinutes} min</td>
+                              <td>${period.durationMinutes}${t("minuteUnit", " min")}</td>
                               <td>${formatNumber(period.totalDistanceM)}</td>
                               <td>${formatNumber(period.highSpeedDistanceM)}</td>
                               <td>${period.peakSpeedMS.toFixed(1)}</td>
@@ -2001,8 +2020,8 @@
                         </tbody>
                         <tfoot>
                           <tr>
-                            <th scope="row">Activity total</th>
-                            <td>${totalMinutes} min</td>
+                            <th scope="row">${t("activityTotal", "Activity total")}</th>
+                            <td>${totalMinutes}${t("minuteUnit", " min")}</td>
                             <td>${formatNumber(totalDistance)}</td>
                             <td>${formatNumber(totalHighSpeed)}</td>
                             <td>${peakSpeed.toFixed(1)}</td>
@@ -2010,16 +2029,16 @@
                         </tfoot>
                       </table>
                     </div>
-                    <span class="table-affordance">Swipe table to inspect all recorded metrics</span>
+                    <span class="table-affordance">${t("swipeTable", "Swipe table to inspect all recorded metrics")}</span>
                   </section>
                 </div>
               </div>
 
-              <aside class="athlete-sidebar" aria-label="Athlete selection">
-                <input class="athlete-search" type="search" value="Search athletes" aria-label="Search athletes" disabled>
+              <aside class="athlete-sidebar" aria-label="${t("athleteSelection", "Athlete selection")}">
+                <input class="athlete-search" type="search" value="${t("searchAthletes", "Search athletes")}" aria-label="${t("searchAthletes", "Search athletes")}" disabled>
 
                 <section class="athlete-section">
-                  <h3>Athletes</h3>
+                  <h3>${t("athletes", "Athletes")}</h3>
                   <div class="athlete-grid">
                     ${system.athletes.map(number => `
                       <span class="athlete-tile" ${number === system.athlete.number ? 'aria-current="true"' : ""}>${number}</span>
@@ -2028,33 +2047,33 @@
                 </section>
 
                 <section class="athlete-section">
-                  <h3>Selected athlete</h3>
+                  <h3>${t("selectedAthlete", "Selected athlete")}</h3>
                   <div class="selected-athlete">
                     <span class="athlete-jersey" aria-hidden="true">${system.athlete.number}</span>
                     <div>
-                      <strong>Athlete ${system.athlete.number}</strong>
-                      <span>${escapeText(system.athlete.position)} · Illustrative</span>
+                      <strong>${t("athlete", "Athlete")} ${system.athlete.number}</strong>
+                      <span>${escapeText(system.athlete.position)} · ${t("illustrative", "Illustrative")}</span>
                     </div>
                   </div>
                   <dl class="athlete-detail-list">
-                    <div><dt>Activity</dt><dd>Training</dd></div>
-                    <div><dt>Periods</dt><dd>${periods.length}</dd></div>
-                    <div><dt>Source</dt><dd>Recorded</dd></div>
+                    <div><dt>${t("activity", "Activity")}</dt><dd>${t("training", "Training")}</dd></div>
+                    <div><dt>${t("periods", "Periods")}</dt><dd>${periods.length}</dd></div>
+                    <div><dt>${t("source", "Source")}</dt><dd>${t("recorded", "Recorded")}</dd></div>
                   </dl>
                 </section>
 
                 <section class="athlete-section">
-                  <h3>Filter</h3>
-                  <select class="athlete-filter" aria-label="Athlete filter" disabled>
-                    <option>All athletes</option>
+                  <h3>${t("filter", "Filter")}</h3>
+                  <select class="athlete-filter" aria-label="${t("athleteFilter", "Athlete filter")}" disabled>
+                    <option>${t("allAthletes", "All athletes")}</option>
                   </select>
                 </section>
               </aside>
             </div>
 
             <footer class="console-footnote">
-              <span><strong>Illustrative performance-system view</strong> / activity · period · athlete · widget</span>
-              <span>Recorded data only / no automatic recommendation</span>
+              <span><strong>${t("illustrativeSystem", "Illustrative performance-system view")}</strong> / ${t("activity", "activity")} · ${t("period", "period")} · ${t("athlete", "athlete")} · ${t("widget", "widget")}</span>
+              <span>${t("recordedOnly", "Recorded data only / no automatic recommendation")}</span>
             </footer>
           </div>
         `;
@@ -2063,72 +2082,57 @@
 
       function buildSurface() {
         app.innerHTML = `
-          <section class="timeline-section" aria-labelledby="timeline-title">
-            <div class="section-heading">
-              <h2 id="timeline-title">Context arrives over time.</h2>
-              <p>Drag, click, or use the arrow keys. Moving backward removes evidence that was not yet available.</p>
-            </div>
-            <div class="timeline" id="timeline" role="slider" tabindex="0" aria-label="Scenario timeline" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0" aria-valuetext="Last exposure">
-              <div class="timeline-track"></div>
-              <div class="timeline-progress"></div>
-              <div class="playhead" aria-hidden="true"></div>
-              <ol class="timeline-points">
-                ${STEP_NAMES.map((name, index) => `<li class="timeline-point" data-point="${index}"><span class="timeline-label">${name}</span></li>`).join("")}
-              </ol>
-            </div>
-          </section>
-
           <details class="methods" id="methods">
-            <summary>Methods / limits</summary>
+            <summary>${t("methods", "Methods / limits")}</summary>
             <div class="methods-content">
-              <p><strong>What the labels mean.</strong> All scenario data is illustrative. Source labels describe where context came from; they do not establish reliability, medical validity, or priority.</p>
-              <p><strong>What the surface does not do.</strong> Statuses remain independent, no automatic recommendation is produced, and qualified staff retain decision authority.</p>
+              <p><strong>${t("labelsMeaning", "What the labels mean.")}</strong> ${t("labelsDetail", "All scenario data is illustrative. Source labels describe where context came from; they do not establish reliability, medical validity, or priority.")}</p>
+              <p><strong>${t("surfaceDoesNot", "What the surface does not do.")}</strong> ${t("surfaceDoesNotDetail", "Statuses remain independent, no automatic recommendation is produced, and qualified staff retain decision authority.")}</p>
             </div>
           </details>
 
-          <footer>Illustrative workflow only. Not medical advice, clearance, injury prediction, or a return-to-play recommendation.</footer>
+          <footer>${t("boundary", "Illustrative workflow only. Not medical advice, clearance, injury prediction, or a return-to-play recommendation.")}</footer>
         `;
 
         reviewRoot.innerHTML = `
           <section class="review-dialog" id="review-host" role="dialog" aria-modal="true" aria-labelledby="review-title" tabindex="-1">
             <header class="review-header">
               <div>
-                <p class="micro">DLY / Progression context</p>
-                <h2 id="review-title">Review progression context</h2>
+                <p class="micro">DLY / ${t("progressionContext", "Progression context")}</p>
+                <h2 id="review-title">${t("reviewContext", "Review progression context")}</h2>
               </div>
-              <button class="review-close" id="close-review-button" type="button">Close review</button>
+              <button class="review-close" id="close-review-button" type="button">${t("closeReview", "Close review")}</button>
             </header>
 
             <div class="review-scroll">
               <div class="scenario-meta">
                 <span id="athlete-label"></span>
-                <span>Decision owner / <b id="decision-owner"></b></span>
+                <span>${t("decisionOwner", "Decision owner")} / <b id="decision-owner"></b></span>
               </div>
 
-              <section class="comparison" aria-label="Plan and context comparison">
+              <section class="comparison" aria-label="${t("planContextComparison", "Plan and context comparison")}">
                 <article class="scene-panel">
                   <span class="panel-number" aria-hidden="true">01</span>
-                  <p class="micro">Existing plan</p>
-                  <h2>The plan on paper</h2>
+                  <p class="micro">${t("existingPlan", "Existing plan")}</p>
+                  <h2>${t("planOnPaper", "The plan on paper")}</h2>
                   <dl class="plan-block">
-                    <div><dt>Previous exposure</dt><dd id="previous-exposure"></dd></div>
-                    <div><dt>Next planned exposure</dt><dd id="planned-exposure"></dd></div>
+                    <div><dt>${t("previousExposure", "Previous exposure")}</dt><dd id="previous-exposure"></dd></div>
+                    <div><dt>${t("nextPlannedExposure", "Next planned exposure")}</dt><dd id="planned-exposure"></dd></div>
                   </dl>
                   <p class="headline-state"><b id="headline-title"></b><span id="headline-detail"></span></p>
                 </article>
 
                 <article class="scene-panel">
                   <span class="panel-number" aria-hidden="true">02</span>
-                  <p class="micro">Decision context</p>
-                  <h2>The context around it</h2>
+                  <p class="micro">${t("decisionContext", "Decision context")}</p>
+                  <h2>${t("contextAround", "The context around it")}</h2>
                   <ul class="context-list" id="context-list"></ul>
                 </article>
               </section>
 
               <section class="evidence-section" id="evidence-section" aria-labelledby="evidence-title">
                 <div class="section-heading">
-                  <h2 id="evidence-title">Evidence that should not cancel itself out</h2>
-                  <p>Each status remains independent. Favorable context never erases what is missing or conflicting.</p>
+                  <h2 id="evidence-title">${t("evidenceIndependent", "Evidence that should not cancel itself out")}</h2>
+                  <p>${t("evidenceIndependentDetail", "Each status remains independent. Favorable context never erases what is missing or conflicting.")}</p>
                 </div>
                 <div class="evidence-grid" id="evidence-grid"></div>
               </section>
@@ -2136,16 +2140,16 @@
               <section class="decision-section" id="decision-section" aria-labelledby="decision-title" hidden>
                 <div class="decision-frame">
                   <div class="decision-copy">
-                    <p class="micro">Human-in-the-loop</p>
-                    <h2 id="decision-title">The evidence stops here.</h2>
-                    <p>Qualified staff makes the final decision.</p>
+                    <p class="micro">${t("humanInLoop", "Human-in-the-loop")}</p>
+                    <h2 id="decision-title">${t("evidenceStops", "The evidence stops here.")}</h2>
+                    <p>${t("staffFinalDecision", "Qualified staff makes the final decision.")}</p>
                   </div>
                   <div class="decision-surface">
-                    <output class="decision-state" id="decision-state">STAFF DECISION — NOT SET</output>
-                    <div class="decision-buttons" aria-label="Staff decision">
-                      ${["progress", "hold", "modify"].map(option => `<button class="decision-button" type="button" data-decision="${option}" aria-pressed="false">${option.toUpperCase()}</button>`).join("")}
+                    <output class="decision-state" id="decision-state">${t("decisionNotSet", "STAFF DECISION — NOT SET")}</output>
+                    <div class="decision-buttons" aria-label="${t("staffDecision", "Staff decision")}">
+                      ${["progress", "hold", "modify"].map(option => `<button class="decision-button" type="button" data-decision="${option}" aria-pressed="false">${decisionText(option)}</button>`).join("")}
                     </div>
-                    <button class="clear-button" id="clear-button" type="button" disabled>Clear selection</button>
+                    <button class="clear-button" id="clear-button" type="button" disabled>${t("clearSelection", "Clear selection")}</button>
                   </div>
                 </div>
               </section>
@@ -2301,7 +2305,7 @@
         document.body.dataset.reviewOpen = "true";
         blockBackground();
         lockPageScroll();
-        liveRegion.textContent = "Progression context review opened.";
+        liveRegion.textContent = t("reviewOpened", "Progression context review opened.");
 
         reviewFocusFrame = requestAnimationFrame(() => {
           reviewFocusFrame = 0;
@@ -2320,7 +2324,7 @@
         delete document.body.dataset.reviewOpen;
         unblockBackground();
         unlockPageScroll();
-        liveRegion.textContent = "Progression context review closed.";
+        liveRegion.textContent = t("reviewClosed", "Progression context review closed.");
 
         const notificationFallback = document.getElementById("context-notification");
         const focusTarget = reviewReturnTarget && reviewReturnTarget.isConnected && reviewReturnTarget.getClientRects().length > 0
@@ -2366,43 +2370,9 @@
       }
 
       function wireSurfaceEvents() {
-        const timeline = document.getElementById("timeline");
         const methods = document.getElementById("methods");
         const reviewButton = document.getElementById("review-context-button");
         const closeReviewButton = document.getElementById("close-review-button");
-        let scrubbing = false;
-
-        const setFromPointer = event => {
-          const rect = timeline.getBoundingClientRect();
-          const ratio = clamp((event.clientX - rect.left) / rect.width, 0, 1);
-          const nearestStep = Math.round(ratio * 3);
-          setStep(nearestStep, "pointer");
-        };
-
-        timeline.addEventListener("pointerdown", event => {
-          scrubbing = true;
-          stopPlayback();
-          timeline.setPointerCapture(event.pointerId);
-          setFromPointer(event);
-        });
-
-        timeline.addEventListener("pointermove", event => {
-          if (scrubbing) setFromPointer(event);
-        });
-
-        timeline.addEventListener("pointerup", event => {
-          scrubbing = false;
-          if (timeline.hasPointerCapture(event.pointerId)) timeline.releasePointerCapture(event.pointerId);
-        });
-
-        timeline.addEventListener("pointercancel", () => { scrubbing = false; });
-
-        timeline.addEventListener("keydown", event => {
-          if (event.key === "ArrowRight") { event.preventDefault(); setStep(state.step + 1, "keyboard"); }
-          if (event.key === "ArrowLeft") { event.preventDefault(); setStep(state.step - 1, "keyboard"); }
-          if (event.key === "Home") { event.preventDefault(); setStep(0, "keyboard"); }
-          if (event.key === "End") { event.preventDefault(); setStep(3, "keyboard"); }
-        });
 
         document.querySelectorAll("[data-decision]").forEach(button => {
           button.addEventListener("click", () => selectDecision(button.dataset.decision));
@@ -2423,7 +2393,7 @@
         return `
           <article class="evidence-card${item.availableAt === animateAt ? " is-new" : ""}" data-status="${escapeText(item.status)}" style="--order:${index}">
             <div class="card-topline">
-              <span class="status-token">${escapeText(item.status)}</span>
+              <span class="status-token">${escapeText(statusText(item.status))}</span>
               <span class="status-symbol" aria-hidden="true">${STATUS_SYMBOLS[item.status] || "·"}</span>
             </div>
             <h3>${escapeText(item.label)}</h3>
@@ -2447,7 +2417,9 @@
         const count = getReviewableEvidence().length;
         const isAvailable = state.step >= data.performanceSystem.notification.availableAt;
         const isVisible = isAvailable && count > 0 && state.selectedDecision === null;
-        const contextLabel = `${count} reviewable context item${count === 1 ? "" : "s"}`;
+        const contextLabel = isKorean
+          ? `검토 가능한 맥락 ${count}건`
+          : `${count} reviewable context item${count === 1 ? "" : "s"}`;
 
         notification.hidden = !isVisible;
         countLabel.textContent = contextLabel;
@@ -2466,7 +2438,7 @@
         document.getElementById("headline-detail").textContent = headline[1];
 
         if (contextEvidence.length === 0) {
-          contextList.innerHTML = `<li class="context-empty">No delayed response or staff-review context is present in the plan view.</li>`;
+          contextList.innerHTML = `<li class="context-empty">${t("noContext", "No delayed response or staff-review context is present in the plan view.")}</li>`;
         } else {
           contextList.innerHTML = contextEvidence.map((item, index) => `
             <li class="context-item${item.availableAt === animateAt ? " is-new" : ""}" data-status="${escapeText(item.status)}" style="--order:${index}">
@@ -2479,11 +2451,6 @@
 
         evidenceGrid.innerHTML = visibleEvidence.map((item, index) => evidenceCard(item, index, animateAt)).join("");
         document.getElementById("decision-section").hidden = state.step < 3;
-
-        document.querySelectorAll(".timeline-point").forEach((point, index) => {
-          point.classList.toggle("is-active", index === state.step);
-          point.classList.toggle("is-past", index < state.step);
-        });
 
         if (state.step === 2 && previousStep < 2 && lastNavigationMode === "playback") {
           const evidenceSection = document.getElementById("evidence-section");
@@ -2500,8 +2467,8 @@
         if (!output || !clearButton) return;
 
         output.textContent = state.selectedDecision
-          ? `STAFF DECISION — ${state.selectedDecision.toUpperCase()} · SELECTED BY USER`
-          : "STAFF DECISION — NOT SET";
+          ? (isKorean ? `스태프 판단 — ${decisionText(state.selectedDecision)} · 사용자가 선택함` : `STAFF DECISION — ${state.selectedDecision.toUpperCase()} · SELECTED BY USER`)
+          : t("decisionNotSet", "STAFF DECISION — NOT SET");
 
         document.querySelectorAll("[data-decision]").forEach(button => {
           button.setAttribute("aria-pressed", String(button.dataset.decision === state.selectedDecision));
@@ -2516,20 +2483,14 @@
         document.body.dataset.showSources = String(state.showSources);
         document.documentElement.style.setProperty("--progress", String(state.progress));
 
-        playButton.textContent = state.isPlaying ? "Ⅱ Pause" : "▶ Play scenario";
-        sourcesButton.textContent = state.showSources ? "Hide sources" : "Show sources";
+        playButton.textContent = state.isPlaying ? t("pause", "Ⅱ Pause") : t("play", "▶ Play scenario");
+        sourcesButton.textContent = state.showSources ? t("hideSources", "Hide sources") : t("showSources", "Show sources");
         sourcesButton.setAttribute("aria-pressed", String(state.showSources));
         previousButton.disabled = state.step === 0 || state.isPlaying;
         nextButton.disabled = state.step === 3 || state.isPlaying;
-        stepCount.textContent = `Step 0${state.step + 1} / 04`;
+        stepCount.textContent = isKorean ? `단계 0${state.step + 1} / 04` : `Step 0${state.step + 1} / 04`;
         stepName.textContent = STEP_NAMES[state.step];
         renderNotification();
-
-        const timeline = document.getElementById("timeline");
-        if (timeline) {
-          timeline.setAttribute("aria-valuenow", String(state.step));
-          timeline.setAttribute("aria-valuetext", STEP_NAMES[state.step]);
-        }
 
         if (state.step !== lastRenderedStep) {
           renderStep(previousStep);
@@ -2568,7 +2529,7 @@
           state.progress = 1;
           state.isPlaying = false;
           animationFrame = 0;
-          liveRegion.textContent = "Scenario complete. Qualified staff decision is not set.";
+          liveRegion.textContent = t("scenarioComplete", "Scenario complete. Qualified staff decision is not set.");
           render();
           return;
         }
@@ -2587,7 +2548,7 @@
         if (reducedMotion.matches) {
           state.step = 3;
           state.progress = 1;
-          liveRegion.textContent = "Scenario advanced to next exposure. Qualified staff decision is not set.";
+          liveRegion.textContent = t("scenarioAdvanced", "Scenario advanced to next exposure. Qualified staff decision is not set.");
           render();
           return;
         }
@@ -2609,7 +2570,7 @@
         if (state.step < 3) state.selectedDecision = null;
         if (state.step < data.performanceSystem.notification.availableAt) state.showSources = false;
         state.progress = state.step / 3;
-        liveRegion.textContent = `${STEP_NAMES[state.step]}. Step ${state.step + 1} of 4.`;
+        liveRegion.textContent = isKorean ? `${STEP_NAMES[state.step]}. ${state.step + 1} / 4단계.` : `${STEP_NAMES[state.step]}. Step ${state.step + 1} of 4.`;
         render();
         if (closesReview) performanceSystemRoot.focus({ preventScroll: true });
       }
@@ -2627,7 +2588,7 @@
         state.methodsOpen = false;
         const methods = document.getElementById("methods");
         if (methods) methods.open = false;
-        if (announce) liveRegion.textContent = "Scenario reset to last exposure.";
+        if (announce) liveRegion.textContent = t("scenarioReset", "Scenario reset to last exposure.");
         render();
         if (closesReview) performanceSystemRoot.focus({ preventScroll: true });
       }
@@ -2635,13 +2596,13 @@
       function selectDecision(decision) {
         if (state.step !== 3) return;
         state.selectedDecision = decision;
-        liveRegion.textContent = `Staff decision ${decision}, selected by user.`;
+        liveRegion.textContent = isKorean ? `스태프 판단 ${decisionText(decision)}을 사용자가 선택했습니다.` : `Staff decision ${decision}, selected by user.`;
         render();
       }
 
       function clearDecision() {
         state.selectedDecision = null;
-        liveRegion.textContent = "Staff decision cleared.";
+        liveRegion.textContent = t("decisionCleared", "Staff decision cleared.");
         render();
       }
 
@@ -2655,7 +2616,7 @@
       nextButton.addEventListener("click", () => setStep(state.step + 1, "button"));
       sourcesButton.addEventListener("click", () => {
         state.showSources = !state.showSources;
-        liveRegion.textContent = state.showSources ? "Evidence sources shown." : "Evidence sources hidden.";
+        liveRegion.textContent = state.showSources ? t("sourcesShown", "Evidence sources shown.") : t("sourcesHidden", "Evidence sources hidden.");
         render();
       });
       resetButton.addEventListener("click", () => resetState(true));
@@ -2674,7 +2635,8 @@
           return response.json();
         })
         .then(payload => {
-          data = payload;
+          data = translatePayload(payload);
+          applyStaticCopy();
           buildPerformanceSystem();
           buildSurface();
           enableControls();
@@ -2682,9 +2644,9 @@
           render();
         })
         .catch(error => {
-          performanceSystemRoot.innerHTML = `<p class="loading-error">The illustrative performance-system view could not be loaded. (${escapeText(error.message)})</p>`;
+          performanceSystemRoot.innerHTML = `<p class="loading-error">${t("systemLoadError", "The illustrative performance-system view could not be loaded.")} (${escapeText(error.message)})</p>`;
           performanceSystemRoot.setAttribute("aria-busy", "false");
-          app.innerHTML = `<p class="loading-error">The illustrative scenario could not be loaded. Start a local HTTP server beside index.html and try again. (${escapeText(error.message)})</p>`;
+          app.innerHTML = `<p class="loading-error">${t("scenarioLoadError", "The illustrative scenario could not be loaded. Start a local HTTP server beside index.html and try again.")} (${escapeText(error.message)})</p>`;
           app.setAttribute("aria-busy", "false");
         });
     })();
