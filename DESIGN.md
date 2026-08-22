@@ -27,7 +27,9 @@ The source design contract is [`DLY-decision-layer/DESIGN.md`](/Users/mattlee/DL
 ## Primitives and behavior
 
 - Hero: identifies DLY as a decision layer for performance and RTP teams, not a clinical conclusion.
-- Controls: the top scenario controls disclose context over four ordered steps. Play, previous, next, and reset are the only scenario navigation; the redundant lower timeline is intentionally absent.
+- Embedded infrastructure view: sits between the hero and the dashboard as a same-page explanatory moment. It uses the same selected `?lang=` route inside a contained frame and introduces how attributable records become review context before the dashboard shows the operational workflow.
+- Locale switcher: a compact `EN` / `KO` control in the hero's upper-right corner links to the equivalent locale route and marks the active language without interrupting the review flow.
+- Controls: the top scenario controls provide two intentional entry paths: `Review decision context` opens the complete available context for a short meeting, while `Walk through context` discloses it over four ordered steps. Previous, next, source disclosure, and reset preserve the inspectable scenario state; the redundant lower timeline is intentionally absent.
 - Performance console: an illustrative source system, visually distinct but not presented as live data.
 - Context notification: appears only after reviewable context arrives.
 - Review drawer: compares the planned exposure with team context, keeps the staff decision separate from the evidence, traps focus, and restores focus on close.
@@ -40,6 +42,7 @@ The source design contract is [`DLY-decision-layer/DESIGN.md`](/Users/mattlee/DL
 - Translate user-visible labels, synthesized-data descriptors, announcements, status labels, and navigation. Keep internal IDs and state values stable so behavior is identical across locales.
 - Keep the medical boundary explicit in both languages. Use `판단 맥락`, `검토`, and `스태프` rather than diagnostic or prescriptive language.
 - Korean text must avoid clipped glyphs, orphaned particles, and unnatural line breaks at 375px, 768px, and 1280px.
+- Korean controls and boundary copy use the reading font with normal tracking, so short action labels and predicates never inherit English mono-control spacing or split within a word.
 
 ## Accessibility and accepted debt
 

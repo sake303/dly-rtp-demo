@@ -102,31 +102,31 @@
     }
 
     .performance-system {
-      --console-bg: #f2f4f6;
-      --console-panel: #ffffff;
-      --console-ink: #161b21;
-      --console-muted: #64707c;
-      --console-line: #d5dbe0;
-      --console-line-strong: #aeb7c0;
-      --console-topbar: #18212a;
-      --console-topbar-ink: #f7f8f9;
-      --console-orange: #f47a20;
-      --console-period: #b9dfec;
-      --console-period-ink: #18333d;
-      --console-green: #72b85d;
-      --console-green-dark: #4f9340;
-      --console-selected: #17649b;
-      --console-white: #ffffff;
-      --console-topbar-muted: rgb(247 248 249 / 70%);
-      --console-topbar-state: rgb(247 248 249 / 72%);
-      --console-topbar-border: rgb(255 255 255 / 46%);
+      --console-bg: var(--surface);
+      --console-panel: var(--surface-raised);
+      --console-ink: var(--text);
+      --console-muted: var(--muted);
+      --console-line: var(--line);
+      --console-line-strong: var(--line-strong);
+      --console-topbar: var(--bg);
+      --console-topbar-ink: var(--text);
+      --console-orange: var(--accent);
+      --console-period: rgb(91 124 255 / 18%);
+      --console-period-ink: var(--text);
+      --console-green: color-mix(in srgb, var(--accent) 82%, var(--text));
+      --console-green-dark: var(--accent);
+      --console-selected: var(--accent);
+      --console-white: var(--text);
+      --console-topbar-muted: rgb(236 236 232 / 70%);
+      --console-topbar-state: rgb(236 236 232 / 72%);
+      --console-topbar-border: rgb(236 236 232 / 32%);
       --console-topbar-active: rgb(255 255 255 / 5%);
-      --console-tab-strip: #e7eaed;
-      --console-table-head: #f6f7f8;
-      --console-surface-subtle: #f5f6f7;
-      --console-sidebar: #eef0f2;
-      --console-total: #d6e9f0;
-      --console-shadow: 0 24px 80px rgb(0 8 14 / 24%);
+      --console-tab-strip: #0d2130;
+      --console-table-head: #102535;
+      --console-surface-subtle: #0e2433;
+      --console-sidebar: #0b1d2b;
+      --console-total: rgb(91 124 255 / 18%);
+      --console-shadow: 0 24px 80px rgb(0 4 10 / 38%);
       --console-space-1: 4px;
       --console-space-half: 2px;
       --console-space-2: 6px;
@@ -164,7 +164,7 @@
       padding-block: var(--console-space-6) var(--console-space-8);
       border-bottom: 1px solid var(--line-strong);
       color: var(--console-ink);
-      color-scheme: light;
+      color-scheme: dark;
     }
 
     .performance-frame {
@@ -188,8 +188,8 @@
       padding: var(--console-space-4) var(--console-space-5);
       border: 1px solid var(--console-line);
       color: var(--console-muted);
-      background: rgb(255 255 255 / 92%);
-      box-shadow: 0 8px 24px rgb(22 27 33 / 12%);
+      background: rgb(12 30 43 / 94%);
+      box-shadow: 0 8px 24px rgb(0 4 10 / 28%);
       backdrop-filter: blur(10px);
       font-family: var(--mono);
       font-size: var(--console-type-mobile);
@@ -930,16 +930,45 @@
     }
 
     .hero {
+      position: relative;
       display: grid;
       grid-template-columns: repeat(12, minmax(0, 1fr));
-      min-height: 70vh;
-      padding-block: clamp(38px, 7vw, 88px) clamp(54px, 8vw, 104px);
+      min-height: clamp(540px, 58vh, 680px);
+      padding-block: clamp(38px, 6vw, 72px) clamp(48px, 6vw, 80px);
       border-bottom: 1px solid var(--line-strong);
     }
 
+    .demo-nav {
+      position: absolute;
+      top: 20px;
+      right: var(--gutter);
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--line-strong);
+      background: color-mix(in srgb, var(--bg) 82%, transparent);
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .09em;
+      line-height: 1;
+    }
+
+    .locale-link {
+      display: grid;
+      min-width: 38px;
+      min-height: 30px;
+      place-items: center;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color var(--motion-micro) var(--ease-ui), background var(--motion-micro) var(--ease-ui);
+    }
+
+    .locale-link + .locale-link { border-left: 1px solid var(--line-strong); }
+    .locale-link:hover { color: var(--text); background: var(--accent-soft); }
+    .locale-link[aria-current="page"] { color: var(--bg); background: var(--accent); }
+
     .eyebrow {
       grid-column: 1 / -1;
-      margin: 0 0 clamp(56px, 10vw, 126px);
+      margin: 0 0 clamp(52px, 8vw, 96px);
       color: var(--muted);
       font-size: 10px;
       white-space: pre-line;
@@ -1022,6 +1051,8 @@
       word-break: keep-all;
     }
 
+    .keep-together { white-space: nowrap; }
+
     .controls-wrap {
       position: sticky;
       z-index: 10;
@@ -1045,8 +1076,15 @@
       font-weight: 600;
     }
 
+    html:lang(ko) .control {
+      font-family: var(--sans);
+      letter-spacing: 0;
+      text-transform: none;
+      word-break: keep-all;
+    }
+
     .control--primary {
-      min-width: 128px;
+      min-width: 168px;
       border-color: var(--accent);
       color: var(--bg);
       background: var(--accent);
@@ -1061,6 +1099,32 @@
       border-color: var(--accent);
       color: var(--accent);
       background: var(--accent-soft);
+    }
+
+    .infrastructure-bridge {
+      padding-block: clamp(48px, 7vw, 88px) clamp(28px, 4vw, 52px);
+      border-bottom: 1px solid var(--line-strong);
+      background: linear-gradient(180deg, rgb(12 30 43 / 28%), transparent 36%);
+    }
+
+    .infrastructure-bridge-copy {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .infrastructure-bridge-copy > div { grid-column: 1 / span 8; }
+    .infrastructure-bridge-copy p { max-width: 56ch; margin: 12px 0 0; color: var(--muted); }
+    .infrastructure-bridge-copy h2 { margin: 0; font-size: clamp(2rem, 4vw, 4.3rem); font-weight: 560; letter-spacing: -.055em; line-height: 1; }
+    .infrastructure-kicker { margin: 0; color: var(--accent); font-family: var(--mono); font-size: 10px; letter-spacing: .09em; text-transform: uppercase; }
+
+    .infrastructure-frame {
+      display: block;
+      width: 100%;
+      height: 790px;
+      border: 1px solid var(--line-strong);
+      background: var(--bg);
     }
 
     .step-readout {
@@ -1502,6 +1566,14 @@
       line-height: 1.7;
     }
 
+    html:lang(ko) footer {
+      font-family: var(--sans);
+      letter-spacing: 0;
+      text-transform: none;
+      overflow-wrap: normal;
+      word-break: keep-all;
+    }
+
     .sr-only {
       position: absolute;
       width: 1px;
@@ -1641,6 +1713,7 @@
       }
       .console-tabs::-webkit-scrollbar { display: none; }
       .console-tab { min-width: 82px; font-size: var(--console-type-mobile); }
+      .console-tab:nth-child(n + 5) { display: none; }
       .console-widgets {
         grid-template-columns: 1fr;
         gap: var(--console-space-3);
@@ -1669,7 +1742,12 @@
         gap: var(--console-space-1);
         padding: var(--console-space-4) var(--console-space-5);
       }
-      .hero { display: block; padding-block: 32px 60px; }
+      .hero { display: block; padding: 76px 0 60px; }
+      .demo-nav { top: 16px; }
+      .infrastructure-bridge { padding-block: 44px 26px; }
+      .infrastructure-bridge-copy { display: block; margin-bottom: 20px; }
+      .infrastructure-bridge-copy h2 { font-size: clamp(2rem, 11vw, 3.2rem); line-height: 1.06; }
+      .infrastructure-frame { height: 1040px; }
       .eyebrow { margin-bottom: 88px; }
       .hero h1 { font-size: clamp(3rem, 15vw, 4.7rem); }
       .hero-copy { margin-top: 52px; padding-left: 16px; }
@@ -1710,14 +1788,32 @@
 </head>
 <body data-step="0" data-show-sources="false">
   <header class="shell hero">
+    <nav class="demo-nav" id="locale-switcher" aria-label="Language">
+      <a class="locale-link" id="locale-en" href="./?lang=en" hreflang="en" lang="en" aria-current="page">EN</a>
+      <a class="locale-link" id="locale-ko" href="./?lang=ko" hreflang="ko" lang="ko">KO</a>
+    </nav>
     <p class="eyebrow" id="eyebrow">DLY / RTP PROGRESSION CONTEXT / ILLUSTRATIVE PROTOTYPE</p>
     <h1 id="hero-title">What context could <em>change</em> the next exposure?</h1>
     <p class="hero-copy" id="hero-copy"><strong>DLY brings scattered exposure, response, and staff context into one review surface</strong> before qualified staff decide to progress, hold, or modify.</p>
   </header>
 
+  <section class="infrastructure-bridge" id="infrastructure-demo" aria-labelledby="infrastructure-title">
+    <div class="shell">
+      <div class="infrastructure-bridge-copy">
+        <div>
+          <p class="infrastructure-kicker" id="infrastructure-kicker">DLY / Infrastructure view</p>
+          <h2 id="infrastructure-title">Before a review, context lives across systems.</h2>
+          <p id="infrastructure-copy">DLY brings those attributable records together around one staff-owned review moment, then the dashboard carries that context into the workflow.</p>
+        </div>
+      </div>
+      <iframe class="infrastructure-frame" id="infrastructure-frame" src="about:blank" title="DLY infrastructure demo" loading="lazy"></iframe>
+    </div>
+  </section>
+
   <div class="controls-wrap">
     <div class="shell controls" id="scenario-controls" aria-label="Scenario controls">
-      <button class="control control--primary" id="play-button" type="button" disabled>▶ Play scenario</button>
+      <button class="control control--primary" id="review-now-button" type="button" disabled>Review decision context</button>
+      <button class="control" id="play-button" type="button" disabled>▶ Walk through context</button>
       <button class="control" id="previous-button" type="button" disabled>Previous</button>
       <button class="control" id="next-button" type="button" disabled>Next</button>
       <button class="control" id="sources-button" type="button" aria-pressed="false" disabled>Show sources</button>
@@ -1749,9 +1845,14 @@
         documentDescription: "자격을 갖춘 퍼포먼스 스태프를 위한 예시 RTP 진행 판단 맥락 워크플로우입니다.",
         eyebrow: "",
         heroTitle: "DLY: 퍼포먼스와 RTP 팀을 위한 Decision Layer",
-        heroCopy: "DLY는 다음 부하를 진행할지, 보류할지, 조정할지 판단할 때 필요한 맥락을 한곳에 모읍니다.",
+        heroCopy: "DLY는 다음 부하를 진행할지, 보류할지, 조정할지 판단할 때 <span class=\"keep-together\">필요한 맥락을</span> 한곳에 모읍니다.",
+        infrastructureKicker: "DLY / 인프라 뷰",
+        infrastructureTitle: "검토 전의 맥락은 여러 시스템에 흩어져 있습니다.",
+        infrastructureCopy: "DLY는 출처가 남는 기록을 하나의 스태프 검토 순간 주위로 정리하고, 대시보드는 그 맥락을 실제 워크플로우로 이어줍니다.",
+        infrastructureFrame: "DLY 인프라 데모",
+        languageNavigation: "언어 선택",
         scenarioControls: "시나리오 제어",
-        play: "▶ 시나리오 재생", pause: "Ⅱ 일시 정지", previous: "이전", next: "다음", showSources: "출처 보기", hideSources: "출처 숨기기", reset: "초기화",
+        reviewNow: "판단 맥락 바로 검토", play: "▶ 맥락 순서대로 보기", pause: "Ⅱ 일시 정지", previous: "이전", next: "다음", showSources: "출처 보기", hideSources: "출처 숨기기", reset: "초기화",
         loadingSystem: "예시 퍼포먼스 시스템 화면을 불러오는 중…", loadingScenario: "예시 시나리오를 불러오는 중…",
         consoleBrand: "퍼포먼스 콘솔", consoleSections: "퍼포먼스 콘솔 섹션", timeline: "타임라인", download: "다운로드", settings: "설정", updates: "업데이트", illustrativeDisconnected: "예시 / 연결되지 않음",
         training: "훈련", illustrativeData: "예시 데이터", activityTimeline: "활동 및 구간 타임라인", activity: "활동", minuteUnit: "분", athleteSelector: "선수 선택", athlete: "선수", illustrative: "예시", dashboardTabs: "대시보드 탭",
@@ -1829,7 +1930,12 @@
       const app = document.getElementById("app");
       const reviewRoot = document.getElementById("review-root");
       const performanceSystemRoot = document.getElementById("performance-system");
+      const localeSwitcher = document.getElementById("locale-switcher");
+      const infrastructureFrame = document.getElementById("infrastructure-frame");
+      const localeEn = document.getElementById("locale-en");
+      const localeKo = document.getElementById("locale-ko");
       const playButton = document.getElementById("play-button");
+      const reviewNowButton = document.getElementById("review-now-button");
       const previousButton = document.getElementById("previous-button");
       const nextButton = document.getElementById("next-button");
       const sourcesButton = document.getElementById("sources-button");
@@ -1848,6 +1954,13 @@
       }
 
       function applyStaticCopy() {
+        localeSwitcher.setAttribute("aria-label", t("languageNavigation", "Language"));
+        infrastructureFrame.src = `./infrastructure.html?embed=1&lang=${locale}`;
+        infrastructureFrame.title = t("infrastructureFrame", "DLY infrastructure demo");
+        const activeLocaleLink = isKorean ? localeKo : localeEn;
+        const inactiveLocaleLink = isKorean ? localeEn : localeKo;
+        activeLocaleLink.setAttribute("aria-current", "page");
+        inactiveLocaleLink.removeAttribute("aria-current");
         if (!isKorean) return;
         document.documentElement.lang = "ko";
         document.title = COPY.documentTitle;
@@ -1855,7 +1968,11 @@
         document.getElementById("eyebrow").textContent = COPY.eyebrow;
         document.getElementById("hero-title").innerHTML = COPY.heroTitle;
         document.getElementById("hero-copy").innerHTML = COPY.heroCopy;
+        document.getElementById("infrastructure-kicker").textContent = COPY.infrastructureKicker;
+        document.getElementById("infrastructure-title").textContent = COPY.infrastructureTitle;
+        document.getElementById("infrastructure-copy").textContent = COPY.infrastructureCopy;
         document.getElementById("scenario-controls").setAttribute("aria-label", COPY.scenarioControls);
+        reviewNowButton.textContent = COPY.reviewNow;
         playButton.textContent = COPY.play;
         previousButton.textContent = COPY.previous;
         nextButton.textContent = COPY.next;
@@ -2483,7 +2600,8 @@
         document.body.dataset.showSources = String(state.showSources);
         document.documentElement.style.setProperty("--progress", String(state.progress));
 
-        playButton.textContent = state.isPlaying ? t("pause", "Ⅱ Pause") : t("play", "▶ Play scenario");
+        playButton.textContent = state.isPlaying ? t("pause", "Ⅱ Pause") : t("play", "▶ Walk through context");
+        reviewNowButton.disabled = state.isPlaying;
         sourcesButton.textContent = state.showSources ? t("hideSources", "Hide sources") : t("showSources", "Show sources");
         sourcesButton.setAttribute("aria-pressed", String(state.showSources));
         previousButton.disabled = state.step === 0 || state.isPlaying;
@@ -2607,11 +2725,15 @@
       }
 
       function enableControls() {
-        [playButton, previousButton, nextButton, sourcesButton, resetButton].forEach(button => { button.disabled = false; });
+        [reviewNowButton, playButton, previousButton, nextButton, sourcesButton, resetButton].forEach(button => { button.disabled = false; });
         previousButton.disabled = true;
       }
 
       playButton.addEventListener("click", togglePlayback);
+      reviewNowButton.addEventListener("click", () => {
+        setStep(data.performanceSystem.notification.availableAt, "direct-review");
+        requestAnimationFrame(() => openReview(reviewNowButton));
+      });
       previousButton.addEventListener("click", () => setStep(state.step - 1, "button"));
       nextButton.addEventListener("click", () => setStep(state.step + 1, "button"));
       sourcesButton.addEventListener("click", () => {

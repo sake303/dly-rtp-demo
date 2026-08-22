@@ -1,0 +1,896 @@
+<!doctype html>
+<html lang="en" data-demo-locales="en ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="An illustrative DLY infrastructure view showing attributable context around a return-to-play staff review.">
+  <title>DLY · Infrastructure Demo</title>
+  <link rel="icon" href="data:,">
+  <script>if (new URLSearchParams(location.search).get('embed') === '1') document.documentElement.dataset.embed = 'true';</script>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #071827;
+      --surface: #0c1e2b;
+      --surface-raised: #10212d;
+      --text: #ecece8;
+      --muted: #9a9ea5;
+      --quiet: #7e848d;
+      --line: #233a4b;
+      --line-strong: #3c566a;
+      --accent: #5b7cff;
+      --accent-soft: rgb(91 124 255 / 14%);
+      --content: 1240px;
+      --gutter: clamp(20px, 3.4vw, 48px);
+      --sans: "Instrument Sans", "Avenir Next", sans-serif;
+      --mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+      --motion-micro: 160ms;
+      --motion-state: 240ms;
+      --motion-reveal: 520ms;
+      --ease-ui: cubic-bezier(.22, 1, .36, 1);
+      --ease-enter: cubic-bezier(.22, 1, .36, 1);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { min-width: 320px; background: var(--bg); }
+
+    html[data-embed="true"] .site-header,
+    html[data-embed="true"] .intro,
+    html[data-embed="true"] .page-footer { display: none; }
+
+    html[data-embed="true"] body { min-width: 0; }
+    html[data-embed="true"] .stage { margin-top: 0; }
+
+    body {
+      min-width: 320px;
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--text);
+      background:
+        linear-gradient(90deg, transparent calc(50% - .5px), rgb(255 255 255 / 3%) 50%, transparent calc(50% + .5px)),
+        linear-gradient(rgb(255 255 255 / 2%) 1px, transparent 1px),
+        var(--bg);
+      background-size: 100% 100%, 100% 48px, auto;
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--text);
+      outline-offset: 4px;
+    }
+
+    .shell {
+      width: min(100%, calc(var(--content) + (var(--gutter) * 2)));
+      margin: 0 auto;
+      padding-inline: var(--gutter);
+    }
+
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      min-height: 72px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .header-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      margin-left: auto;
+    }
+
+    .brand {
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: .78rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-decoration: none;
+    }
+
+    .brand span { color: var(--muted); font-weight: 400; }
+
+    .status-label,
+    .eyebrow,
+    .source-tag,
+    .field-label,
+    .packet-status,
+    .packet-meta,
+    .footer-label {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: .66rem;
+      font-weight: 500;
+      letter-spacing: .08em;
+      line-height: 1.35;
+      text-transform: uppercase;
+    }
+
+    .status-label { white-space: nowrap; }
+
+    .locale-switcher {
+      display: inline-flex;
+      border: 1px solid var(--line-strong);
+      font-family: var(--mono);
+      font-size: .62rem;
+      letter-spacing: .08em;
+      line-height: 1;
+    }
+
+    .locale-link {
+      display: grid;
+      min-width: 36px;
+      min-height: 30px;
+      place-items: center;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color var(--motion-micro) var(--ease-ui), background var(--motion-micro) var(--ease-ui);
+    }
+
+    .locale-link + .locale-link { border-left: 1px solid var(--line-strong); }
+    .locale-link:hover { color: var(--text); background: var(--accent-soft); }
+    .locale-link[aria-current="page"] { color: var(--bg); background: var(--accent); }
+
+    html:lang(ko) .status-label,
+    html:lang(ko) .eyebrow,
+    html:lang(ko) .source-tag,
+    html:lang(ko) .field-label,
+    html:lang(ko) .packet-status,
+    html:lang(ko) .packet-meta,
+    html:lang(ko) .footer-label,
+    html:lang(ko) .locale-switcher,
+    html:lang(ko) .motion-button,
+    html:lang(ko) .motion-status,
+    html:lang(ko) .handoff-kicker {
+      font-family: var(--sans);
+      letter-spacing: normal;
+      text-transform: none;
+    }
+
+    html:lang(ko) h1,
+    html:lang(ko) .stage-caption,
+    html:lang(ko) .field-value,
+    html:lang(ko) .evidence-value,
+    html:lang(ko) .footer-copy {
+      overflow-wrap: normal;
+      word-break: keep-all;
+    }
+
+    html:lang(ko) h1 {
+      max-width: 900px;
+      font-size: clamp(3rem, 5.1vw, 5.15rem);
+      letter-spacing: -.06em;
+      line-height: 1.02;
+    }
+
+    .intro {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 16px;
+      padding-block: clamp(56px, 8vw, 112px) clamp(40px, 5vw, 72px);
+    }
+
+    .intro-copy { grid-column: 1 / span 8; }
+
+    .eyebrow { margin: 0 0 20px; }
+
+    h1,
+    h2,
+    h3,
+    p { margin-top: 0; }
+
+    h1 {
+      max-width: 760px;
+      margin-bottom: 22px;
+      font-size: clamp(3rem, 7vw, 6.5rem);
+      font-weight: 520;
+      letter-spacing: -.07em;
+      line-height: .92;
+    }
+
+    .intro-copy > p:last-child {
+      max-width: 590px;
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.45vw, 1.22rem);
+      line-height: 1.55;
+    }
+
+    .intro-note {
+      align-self: end;
+      grid-column: 10 / -1;
+      margin: 0;
+      padding-bottom: 6px;
+      color: var(--quiet);
+      font-family: var(--mono);
+      font-size: .71rem;
+      line-height: 1.6;
+    }
+
+    .stage {
+      position: relative;
+      min-height: 700px;
+      overflow: hidden;
+      isolation: isolate;
+      border-top: 1px solid var(--line-strong);
+      border-bottom: 1px solid var(--line-strong);
+    }
+
+    .stage::before,
+    .stage::after {
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      pointer-events: none;
+      content: "";
+    }
+
+    .stage::before {
+      background:
+        linear-gradient(90deg, transparent calc(25% - .5px), rgb(255 255 255 / 3%) 25%, transparent calc(25% + .5px), transparent calc(75% - .5px), rgb(255 255 255 / 3%) 75%, transparent calc(75% + .5px)),
+        linear-gradient(rgb(255 255 255 / 3%) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 116px;
+    }
+
+    .stage::after {
+      inset: auto 18% 0;
+      height: 34%;
+      background: linear-gradient(180deg, transparent, rgb(255 255 255 / 3%));
+    }
+
+    .stage-caption {
+      position: absolute;
+      z-index: 2;
+      top: 20px;
+      left: 50%;
+      width: min(245px, 24vw);
+      margin: 0;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: .7rem;
+      letter-spacing: .05em;
+      line-height: 1.6;
+      text-align: center;
+      transform: translateX(-50%);
+    }
+
+    .source-panel {
+      position: absolute;
+      display: grid;
+      width: min(310px, calc(30vw - 18px));
+      min-height: 184px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      background: rgb(12 30 43 / 88%);
+      box-shadow: 0 24px 60px rgb(0 5 10 / 15%);
+    }
+
+    .source-panel[data-source="medical"] { top: 54px; left: 0; }
+    .source-panel[data-source="performance"] { bottom: 54px; left: 7%; }
+    .source-panel[data-source="team"] { top: 54px; right: 0; }
+    .source-panel[data-source="history"] { right: 7%; bottom: 54px; }
+
+    .panel-heading,
+    .panel-footer,
+    .field-row,
+    .evidence-heading,
+    .staff-status {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .panel-heading { margin-bottom: 22px; }
+
+    .panel-title {
+      margin: 0;
+      font-size: .98rem;
+      font-weight: 570;
+      letter-spacing: -.02em;
+    }
+
+    .source-tag { color: var(--quiet); }
+
+    .source-fields { display: grid; gap: 12px; }
+
+    .field-row {
+      align-items: start;
+      padding-bottom: 9px;
+      border-bottom: 1px solid rgb(60 86 106 / 56%);
+    }
+
+    .field-row:last-child { padding-bottom: 0; border-bottom: 0; }
+
+    .field-label { flex: 0 0 34%; color: var(--quiet); font-size: .57rem; }
+
+    .field-value {
+      flex: 1;
+      color: var(--text);
+      font-size: .75rem;
+      line-height: 1.35;
+      text-align: right;
+    }
+
+    .panel-footer {
+      align-self: end;
+      margin-top: 17px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+
+    .panel-footer span { color: var(--quiet); font-family: var(--mono); font-size: .58rem; letter-spacing: .05em; }
+
+    .connector {
+      position: absolute;
+      z-index: -1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--line), transparent);
+      opacity: .8;
+      transform-origin: left center;
+    }
+
+    .connector[data-connector="medical"] { top: 234px; left: 22%; width: 27%; transform: rotate(24deg); }
+    .connector[data-connector="performance"] { bottom: 231px; left: 29%; width: 22%; transform: rotate(-25deg); }
+    .connector[data-connector="team"] { top: 234px; right: 22%; width: 27%; transform: rotate(156deg); }
+    .connector[data-connector="history"] { right: 29%; bottom: 231px; width: 22%; transform: rotate(205deg); }
+
+    .decision-node {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      z-index: 1;
+      display: grid;
+      width: 184px;
+      min-height: 138px;
+      place-content: center;
+      padding: 18px;
+      border: 1px solid var(--line-strong);
+      background: rgb(7 24 39 / 92%);
+      text-align: center;
+      transform: translate(-50%, -50%);
+    }
+
+    .decision-node::before {
+      position: absolute;
+      inset: 8px;
+      border: 1px solid var(--line);
+      content: "";
+    }
+
+    .decision-node p { margin: 0; }
+    .decision-node .node-label { color: var(--text); font-size: .83rem; font-weight: 560; }
+    .decision-node .node-state { margin-top: 5px; color: var(--quiet); font-family: var(--mono); font-size: .56rem; letter-spacing: .07em; text-transform: uppercase; }
+
+    .context-packet {
+      position: absolute;
+      z-index: 4;
+      top: 50%;
+      left: 50%;
+      display: grid;
+      width: min(960px, calc(100% - 72px));
+      grid-template-columns: minmax(215px, .85fr) minmax(0, 1.8fr) minmax(140px, .55fr);
+      border: 1px solid var(--line-strong);
+      background: var(--surface);
+      box-shadow: 0 28px 88px rgb(0 5 10 / 36%);
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, calc(-50% + 32px));
+      visibility: hidden;
+    }
+
+    .packet-plan,
+    .packet-evidence,
+    .dashboard-preview { padding: 24px; }
+
+    .packet-plan,
+    .packet-evidence { border-right: 1px solid var(--line); }
+
+    .packet-status { margin: 0 0 28px; color: var(--accent); }
+    .packet-case { margin: 0 0 28px; color: var(--muted); font-family: var(--mono); font-size: .67rem; line-height: 1.5; }
+    .plan-value { margin: 8px 0 0; font-size: 1.1rem; font-weight: 560; letter-spacing: -.025em; line-height: 1.25; }
+    .packet-meta { margin: 32px 0 0; color: var(--quiet); }
+
+    .packet-evidence { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+    .evidence-card { min-width: 0; }
+    .evidence-heading { display: block; margin-bottom: 20px; }
+    .evidence-heading h3 { margin: 6px 0 0; font-size: .82rem; font-weight: 560; letter-spacing: -.015em; line-height: 1.25; }
+    .evidence-value { margin: 0; font-size: .78rem; line-height: 1.45; }
+    .evidence-time { display: block; margin-top: 15px; color: var(--quiet); font-family: var(--mono); font-size: .56rem; letter-spacing: .05em; }
+
+    .dashboard-preview { display: grid; align-content: space-between; background: var(--surface-raised); }
+    .preview-window { display: grid; min-height: 120px; padding: 12px; border: 1px solid var(--line-strong); background: var(--bg); }
+    .preview-bar { width: 48%; height: 5px; margin-bottom: 16px; background: var(--line-strong); }
+    .preview-row { height: 1px; margin-top: 11px; background: var(--line); }
+    .preview-row.is-accent { width: 72%; background: var(--accent); }
+    .dashboard-preview p { margin: 0; color: var(--quiet); font-family: var(--mono); font-size: .57rem; letter-spacing: .06em; line-height: 1.45; text-transform: uppercase; }
+
+    .handoff-screen {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      z-index: 5;
+      width: min(760px, calc(100% - 96px));
+      padding: 24px;
+      border: 1px solid var(--line-strong);
+      background: var(--surface);
+      box-shadow: 0 28px 88px rgb(0 5 10 / 36%);
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, -50%) scale(.92);
+    }
+
+    .handoff-header,
+    .handoff-title-row,
+    .handoff-row { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+    .handoff-header { margin-bottom: 28px; }
+    .handoff-kicker { margin: 0; color: var(--muted); font-family: var(--mono); font-size: .62rem; letter-spacing: .08em; text-transform: uppercase; }
+    .handoff-title { margin: 0; font-size: 1.1rem; font-weight: 560; letter-spacing: -.025em; }
+    .handoff-title-row { padding: 15px 0; border-bottom: 1px solid var(--line); }
+    .handoff-title-row p { margin: 0; color: var(--muted); font-family: var(--mono); font-size: .63rem; letter-spacing: .06em; text-transform: uppercase; }
+    .handoff-row { padding: 17px 0; border-bottom: 1px solid var(--line); }
+    .handoff-row:last-child { border-bottom: 0; }
+    .handoff-row strong { font-size: .86rem; font-weight: 560; }
+    .handoff-row span { color: var(--quiet); font-family: var(--mono); font-size: .6rem; letter-spacing: .05em; }
+    .handoff-row.is-entry { padding-inline: 14px; background: var(--accent-soft); }
+    .handoff-row.is-entry span { color: var(--text); }
+
+    .staff-status { grid-column: 1 / -1; padding: 14px 18px; border-top: 1px solid var(--line); background: rgb(7 24 39 / 62%); }
+    .staff-status span:last-child { color: var(--text); font-family: var(--mono); font-size: .63rem; letter-spacing: .05em; }
+
+    .case-line,
+    .matching-keys {
+      position: absolute;
+      z-index: 3;
+      color: var(--text);
+      font-family: var(--mono);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(12px);
+    }
+
+    .case-line {
+      top: calc(50% + 100px);
+      left: 50%;
+      width: min(260px, 34vw);
+      color: var(--muted);
+      font-size: .65rem;
+      letter-spacing: .04em;
+      line-height: 1.55;
+      text-align: center;
+      transform: translate(-50%, 12px);
+    }
+
+    .case-line strong { display: block; color: var(--text); font-size: .82rem; font-weight: 560; letter-spacing: .07em; }
+
+    .matching-keys {
+      top: calc(50% - 104px);
+      left: 50%;
+      display: flex;
+      gap: 8px;
+      transform: translate(-50%, 12px);
+    }
+
+    .matching-keys span {
+      padding: 5px 7px;
+      border: 1px solid var(--line-strong);
+      color: var(--muted);
+      font-size: .54rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .motion-controls {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 20px;
+      align-items: center;
+      padding-block: 20px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .motion-status { margin: 0; color: var(--muted); font-family: var(--mono); font-size: .68rem; line-height: 1.5; }
+    .motion-status strong { color: var(--text); font-weight: 560; }
+    .motion-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+
+    .motion-button {
+      min-height: 38px;
+      padding: 0 12px;
+      border: 1px solid var(--line-strong);
+      border-radius: 0;
+      color: var(--text);
+      background: transparent;
+      font-family: var(--mono);
+      font-size: .63rem;
+      letter-spacing: .04em;
+      transition: transform var(--motion-micro) var(--ease-ui);
+    }
+
+    .motion-button:hover:not(:disabled) { border-color: var(--text); background: rgb(255 255 255 / 5%); }
+    .motion-button:active:not(:disabled) { transform: translateY(1px) scale(.99); transition-duration: 80ms; }
+    .motion-button:disabled { color: var(--quiet); border-color: var(--line); }
+    .motion-button.is-primary { border-color: var(--line-strong); background: rgb(255 255 255 / 4%); }
+
+    body[data-motion-ready="true"] .source-panel,
+    body[data-motion-ready="true"] .decision-node,
+    body[data-motion-ready="true"] .context-packet,
+    body[data-motion-ready="true"] .handoff-screen,
+    body[data-motion-ready="true"] .case-line,
+    body[data-motion-ready="true"] .matching-keys,
+    body[data-motion-ready="true"] .source-panel::after {
+      transition: transform var(--motion-reveal) var(--ease-enter), opacity var(--motion-reveal) var(--ease-enter);
+    }
+
+    body[data-motion-ready="true"] .source-panel {
+      opacity: 0;
+      pointer-events: none;
+      transform: var(--entry-transform);
+      will-change: transform, opacity;
+    }
+
+    body[data-motion-ready="true"] .source-panel[data-source="medical"] { --entry-transform: translateX(-24px); }
+    body[data-motion-ready="true"] .source-panel[data-source="performance"] { --entry-transform: translateY(24px); }
+    body[data-motion-ready="true"] .source-panel[data-source="team"] { --entry-transform: translateX(24px); }
+    body[data-motion-ready="true"] .source-panel[data-source="history"] { --entry-transform: translate(24px, 24px); }
+    body[data-motion-ready="true"] .source-panel.is-revealed { opacity: 1; transform: translate(0); }
+
+    body[data-motion-ready="true"] .source-panel::after {
+      position: absolute;
+      right: 12px;
+      bottom: 10px;
+      color: var(--text);
+      content: attr(data-source-label);
+      font-family: var(--mono);
+      font-size: .56rem;
+      letter-spacing: .06em;
+      opacity: 0;
+      text-transform: uppercase;
+    }
+
+    body[data-motion-ready="true"] .source-panel .field-row {
+      opacity: 0;
+      transform: translateY(8px);
+      transition: transform var(--motion-state) var(--ease-enter), opacity var(--motion-state) var(--ease-enter);
+    }
+
+    body[data-motion-ready="true"] .source-panel.is-revealed .field-row { opacity: 1; transform: translateY(0); }
+    body[data-motion-ready="true"] .source-panel.is-revealed .field-row:nth-child(2) { transition-delay: 70ms; }
+    body[data-motion-ready="true"] .source-panel.is-revealed .field-row:nth-child(3) { transition-delay: 140ms; }
+    body[data-motion-ready="true"] .source-panel.is-revealed .field-row:nth-child(4) { transition-delay: 210ms; }
+    body[data-motion-ready="true"] .source-panel.is-revealed .field-row:nth-child(5) { transition-delay: 280ms; }
+
+    body[data-motion-ready="true"] .decision-node { opacity: .36; transition: transform var(--motion-reveal) var(--ease-enter), opacity var(--motion-state) var(--ease-ui); }
+    body[data-motion-ready="true"] .context-packet,
+    body[data-motion-ready="true"] .handoff-screen { transition: transform var(--motion-reveal) var(--ease-enter), opacity var(--motion-reveal) var(--ease-enter); }
+
+    .stage[data-beat="review-moment"] .source-panel.is-revealed { opacity: .72; }
+    .stage[data-beat="review-moment"] .source-panel[data-source="history"] { opacity: 1; }
+    .stage[data-beat="review-moment"] .case-line.is-visible,
+    .stage[data-beat="connect-context"] .matching-keys.is-visible { opacity: 1; transform: translate(-50%, 0); }
+
+    .stage[data-beat="connect-context"] .source-panel { opacity: .94; }
+    .stage[data-beat="connect-context"] .source-panel::after { padding: 4px 6px; border: 1px solid var(--line-strong); background: var(--surface); opacity: 1; transform: scale(2.18); transform-origin: right bottom; }
+    .stage[data-beat="connect-context"] .source-panel[data-source="medical"] { transform: translate(190px, 118px) scale(.46); }
+    .stage[data-beat="connect-context"] .source-panel[data-source="performance"] { transform: translate(152px, -168px) scale(.46); }
+    .stage[data-beat="connect-context"] .source-panel[data-source="team"] { transform: translate(-190px, 118px) scale(.46); }
+    .stage[data-beat="connect-context"] .source-panel[data-source="history"] { transform: translate(-152px, -168px) scale(.46); }
+    .stage[data-beat="connect-context"] .decision-node,
+    .stage[data-beat="reviewable-context"] .decision-node { opacity: 1; }
+    .stage[data-ready="true"] .decision-node { border-color: var(--accent); }
+    .stage[data-ready="true"] .decision-node::before { border-color: rgb(91 124 255 / 48%); }
+    .stage[data-ready="true"] ~ .motion-controls .motion-button.is-primary { border-color: var(--accent); background: var(--accent-soft); }
+
+    body[data-motion-ready="true"] .stage[data-beat="reviewable-context"] .source-panel,
+    body[data-motion-ready="true"] .stage[data-beat="dashboard-handoff"] .source-panel,
+    body[data-motion-ready="true"] .stage[data-beat="reviewable-context"] .decision-node,
+    body[data-motion-ready="true"] .stage[data-beat="dashboard-handoff"] .decision-node,
+    body[data-motion-ready="true"] .stage[data-beat="reviewable-context"] .matching-keys,
+    body[data-motion-ready="true"] .stage[data-beat="dashboard-handoff"] .matching-keys { opacity: 0; pointer-events: none; }
+
+    .stage[data-beat="reviewable-context"] .context-packet,
+    .stage[data-beat="dashboard-handoff"] .context-packet { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%); visibility: visible; }
+    .stage[data-beat="dashboard-handoff"] .context-packet { opacity: 0; pointer-events: none; transform: translate(-50%, -50%) scale(.82); }
+    .stage[data-beat="dashboard-handoff"] .handoff-screen { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+    .stage[data-beat="dashboard-handoff"] .dashboard-preview { box-shadow: inset 0 0 0 1px rgb(91 124 255 / 35%); }
+
+.page-footer {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+  padding-block: 32px 54px;
+  border-top: 1px solid var(--line-strong);
+}
+
+.footer-label { grid-column: 1 / span 2; margin: 0; }
+.footer-copy { grid-column: 3 / span 8; margin: 0; color: var(--text); font-size: clamp(1.08rem, 2vw, 1.5rem); font-weight: 500; letter-spacing: -.03em; line-height: 1.28; }
+.footer-copy strong { color: var(--text); font-weight: 600; }
+html:lang(ko) .footer-copy { grid-column: 3 / span 9; }
+
+    @media (max-width: 900px) {
+      .intro-copy { grid-column: 1 / span 9; }
+      .intro-note { grid-column: 10 / -1; }
+      .stage { min-height: 760px; }
+      .source-panel { width: min(280px, calc(34vw - 12px)); }
+      .source-panel[data-source="performance"] { left: 2%; }
+      .source-panel[data-source="history"] { right: 2%; }
+      .context-packet { grid-template-columns: minmax(180px, .75fr) minmax(0, 1.45fr); }
+      .dashboard-preview { display: none; }
+      .packet-evidence { border-right: 0; }
+    }
+
+    @media (max-width: 640px) {
+      .site-header { min-height: 62px; }
+      .site-header .status-label { display: none; }
+      .header-actions { gap: 8px; }
+      .status-label { font-size: .56rem; }
+      .intro { display: block; padding-block: 54px 44px; }
+      h1 { max-width: 510px; font-size: clamp(2.75rem, 14vw, 4.4rem); }
+      .intro-note { max-width: 280px; margin-top: 28px; }
+      .stage { display: grid; min-height: 0; gap: 14px; padding: 20px 0; overflow: visible; }
+      .stage::before { background-size: 100% 100%, 100% 84px; }
+      .stage::after { inset: auto 0 0; height: 20%; }
+      .stage-caption { position: static; order: -1; width: auto; margin: 4px auto 6px; transform: none; }
+      .source-panel { position: relative; width: auto; min-height: 0; padding: 18px; }
+      .source-panel[data-source] { inset: auto; }
+      .connector { display: none; }
+      .decision-node { position: relative; top: auto; left: auto; order: 2; width: auto; min-height: 86px; margin: 2px 18% 0; transform: none; }
+      .source-panel[data-source="performance"] { order: 3; }
+      .source-panel[data-source="team"] { order: 1; }
+      .source-panel[data-source="history"] { order: 4; }
+      .context-packet { top: 50%; left: 50%; width: min(960px, calc(100% - 72px)); transform: translate(-50%, calc(-50% + 32px)); }
+      .packet-plan,
+      .packet-evidence { padding: 18px; }
+      .packet-evidence { grid-template-columns: 1fr; gap: 18px; }
+      .staff-status { grid-column: 1 / -1; }
+      .page-footer { display: block; padding-block: 38px 46px; }
+      .footer-copy { margin-top: 12px; }
+
+      body[data-motion-ready="true"] .stage { display: block; min-height: 560px; padding: 0; overflow: hidden; }
+      body[data-motion-ready="true"] .stage-caption { position: absolute; top: 20px; left: 50%; width: min(255px, calc(100% - 48px)); transform: translateX(-50%); }
+      body[data-motion-ready="true"] .source-panel { position: absolute; width: calc(100% - 32px); min-height: 0; padding: 18px; }
+      body[data-motion-ready="true"] .source-panel[data-source="medical"] { top: 72px; left: 16px; }
+      body[data-motion-ready="true"] .source-panel[data-source="performance"] { top: 166px; left: 16px; }
+      body[data-motion-ready="true"] .source-panel[data-source="team"] { top: 114px; left: 16px; }
+      body[data-motion-ready="true"] .source-panel[data-source="history"] { top: 218px; left: 16px; }
+      body[data-motion-ready="true"] .source-panel .source-fields { gap: 8px; }
+      body[data-motion-ready="true"] .source-panel .field-row { padding-bottom: 6px; }
+      body[data-motion-ready="true"] .source-panel .panel-heading { margin-bottom: 14px; }
+      body[data-motion-ready="true"] .source-panel .panel-footer { margin-top: 12px; padding-top: 8px; }
+      body[data-motion-ready="true"] .decision-node { position: absolute; top: 50%; left: 50%; width: 154px; min-height: 112px; margin: 0; transform: translate(-50%, -50%); }
+      body[data-motion-ready="true"] .case-line { top: calc(50% + 82px); width: min(250px, calc(100% - 48px)); }
+      body[data-motion-ready="true"] .matching-keys { top: calc(50% - 92px); }
+      body[data-motion-ready="true"] .stage[data-beat="medical-boundary"] .decision-node,
+      body[data-motion-ready="true"] .stage[data-beat="recent-exposure"] .decision-node,
+      body[data-motion-ready="true"] .stage[data-beat="team-requirement"] .decision-node,
+      body[data-motion-ready="true"] .stage[data-beat="review-moment"] .decision-node { opacity: 0; }
+      body[data-motion-ready="true"] .stage[data-beat="medical-boundary"] .source-panel[data-source="medical"] { top: 142px; left: 16px; }
+      body[data-motion-ready="true"] .stage[data-beat="recent-exposure"] .source-panel[data-source="medical"],
+      body[data-motion-ready="true"] .stage[data-beat="team-requirement"] .source-panel[data-source="medical"],
+      body[data-motion-ready="true"] .stage[data-beat="team-requirement"] .source-panel[data-source="performance"],
+      body[data-motion-ready="true"] .stage[data-beat="review-moment"] .source-panel,
+      body[data-motion-ready="true"] .stage[data-beat="connect-context"] .source-panel { transform: translate(-50%, -50%) scale(.27); opacity: .78; }
+      body[data-motion-ready="true"] .stage[data-beat="team-requirement"] .source-panel[data-source="medical"],
+      body[data-motion-ready="true"] .stage[data-beat="team-requirement"] .source-panel[data-source="performance"] { opacity: 0; pointer-events: none; }
+      body[data-motion-ready="true"] .stage[data-beat="recent-exposure"] .source-panel[data-source="medical"] { top: 174px; left: 28%; }
+      body[data-motion-ready="true"] .stage[data-beat="recent-exposure"] .source-panel[data-source="performance"] { top: 142px; left: 16px; transform: translate(0); opacity: 1; }
+      body[data-motion-ready="true"] .stage[data-beat="team-requirement"] .source-panel[data-source="medical"],
+      body[data-motion-ready="true"] .stage[data-beat="review-moment"] .source-panel[data-source="medical"],
+      body[data-motion-ready="true"] .stage[data-beat="connect-context"] .source-panel[data-source="medical"] { top: 164px; left: 24%; }
+      body[data-motion-ready="true"] .stage[data-beat="team-requirement"] .source-panel[data-source="performance"],
+      body[data-motion-ready="true"] .stage[data-beat="review-moment"] .source-panel[data-source="performance"],
+      body[data-motion-ready="true"] .stage[data-beat="connect-context"] .source-panel[data-source="performance"] { top: 392px; left: 25%; }
+      body[data-motion-ready="true"] .stage[data-beat="team-requirement"] .source-panel[data-source="team"] { top: 142px; left: 16px; transform: translate(0); opacity: 1; }
+      body[data-motion-ready="true"] .stage[data-beat="review-moment"] .source-panel[data-source="team"],
+      body[data-motion-ready="true"] .stage[data-beat="connect-context"] .source-panel[data-source="team"] { top: 164px; left: 60%; }
+      body[data-motion-ready="true"] .stage[data-beat="review-moment"] .source-panel[data-source="history"],
+      body[data-motion-ready="true"] .stage[data-beat="connect-context"] .source-panel[data-source="history"] { top: 392px; left: 60%; }
+      body[data-motion-ready="true"] .stage[data-beat="review-moment"] .source-panel[data-source="medical"],
+      body[data-motion-ready="true"] .stage[data-beat="review-moment"] .source-panel[data-source="performance"],
+      body[data-motion-ready="true"] .stage[data-beat="review-moment"] .source-panel[data-source="team"] { opacity: 0; pointer-events: none; }
+      body[data-motion-ready="true"] .stage[data-beat="review-moment"] .source-panel[data-source="history"] { top: 142px; left: 16px; transform: translate(0); opacity: 1; }
+      body[data-motion-ready="true"] .stage[data-beat="review-moment"] .case-line { top: 446px; }
+      body[data-motion-ready="true"] .stage[data-beat="connect-context"] .source-panel::after { right: auto; left: 12px; font-size: .56rem; letter-spacing: .04em; opacity: 1; white-space: nowrap; transform: scale(3.25); transform-origin: left bottom; }
+      body[data-motion-ready="true"] .context-packet { grid-template-columns: 1fr; }
+      body[data-motion-ready="true"] .context-packet .packet-plan { border-right: 0; border-bottom: 1px solid var(--line); }
+      body[data-motion-ready="true"] .dashboard-preview { display: none; }
+      body[data-motion-ready="true"] .handoff-screen { width: min(760px, calc(100% - 48px)); }
+      body[data-motion-ready="true"] .stage[data-beat="reviewable-context"],
+      body[data-motion-ready="true"] .stage[data-beat="dashboard-handoff"] { min-height: 860px; }
+      body[data-motion-ready="true"] .stage[data-beat="reviewable-context"] .context-packet,
+      body[data-motion-ready="true"] .stage[data-beat="dashboard-handoff"] .context-packet { top: 112px; transform: translateX(-50%); }
+      body[data-motion-ready="true"] .stage[data-beat="dashboard-handoff"] .context-packet { transform: translateX(-50%) scale(.82); }
+      body[data-motion-ready="true"] .stage[data-beat="dashboard-handoff"] .handoff-screen { transform: translate(-50%, -50%) scale(1); }
+      .motion-controls { grid-template-columns: 1fr; gap: 14px; }
+      .motion-actions { justify-content: flex-start; }
+      html:lang(ko) h1 {
+        max-width: 305px;
+        font-size: clamp(2.3rem, 10.2vw, 3.25rem);
+        line-height: 1.08;
+      }
+
+      html[data-embed="true"] .stage[data-beat="reviewable-context"],
+      html[data-embed="true"] .stage[data-beat="dashboard-handoff"] { min-height: 860px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+      body[data-motion-ready="true"] .source-panel,
+      body[data-motion-ready="true"] .decision-node,
+      body[data-motion-ready="true"] .context-packet,
+      body[data-motion-ready="true"] .handoff-screen,
+      body[data-motion-ready="true"] .case-line,
+      body[data-motion-ready="true"] .matching-keys,
+      body[data-motion-ready="true"] .source-panel::after,
+      body[data-motion-ready="true"] .source-panel .field-row { transition: opacity 120ms linear !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="shell site-header">
+    <a class="brand" href="./" aria-label="Return to DLY RTP dashboard">DLY <span>/ Infrastructure demo</span></a>
+    <div class="header-actions">
+      <p class="status-label">RTP review context</p>
+      <nav class="locale-switcher" aria-label="Language">
+        <a class="locale-link" id="locale-en" href="./infrastructure.html?lang=en" hreflang="en" lang="en" aria-current="page">EN</a>
+        <a class="locale-link" id="locale-ko" href="./infrastructure.html?lang=ko" hreflang="ko" lang="ko">KO</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="shell intro" aria-labelledby="page-title">
+      <div class="intro-copy">
+        <p class="eyebrow">Illustrative infrastructure workflow</p>
+        <h1 id="page-title">A decision rarely starts in one system.</h1>
+        <p>DLY organizes attributable operational context around a staff-owned review.</p>
+      </div>
+      <p class="intro-note">Illustrative records only.<br>Not a medical recommendation.</p>
+    </section>
+
+    <section class="shell stage" aria-labelledby="stage-title" data-scene="fragmented-inputs">
+      <h2 id="stage-title" class="stage-caption">Four systems hold a piece of the same review moment.</h2>
+
+      <article class="source-panel" data-source="medical" data-motion-role="source-panel">
+        <div class="panel-heading">
+          <h3 class="panel-title">Medical context</h3>
+          <span class="source-tag">source</span>
+        </div>
+        <div class="source-fields">
+          <div class="field-row"><span class="field-label">Source</span><span class="field-value">Medical team</span></div>
+          <div class="field-row"><span class="field-label">Case</span><span class="field-value">RTP-017 · lower-limb recovery pathway</span></div>
+          <div class="field-row"><span class="field-label">Practice status</span><span class="field-value">Controlled team integration</span></div>
+          <div class="field-row"><span class="field-label">Restriction</span><span class="field-value">Review before uncontrolled 5v5</span></div>
+          <div class="field-row"><span class="field-label">Next review</span><span class="field-value">Tue · 14:00</span></div>
+        </div>
+        <div class="panel-footer"><span>staff-entered</span><span>Tue · 12:18</span></div>
+      </article>
+
+      <article class="source-panel" data-source="performance" data-motion-role="source-panel">
+        <div class="panel-heading">
+          <h3 class="panel-title">Performance exposure</h3>
+          <span class="source-tag">source</span>
+        </div>
+        <div class="source-fields">
+          <div class="field-row"><span class="field-label">Source</span><span class="field-value">Performance system</span></div>
+          <div class="field-row"><span class="field-label">Session</span><span class="field-value">Controlled 4v4</span></div>
+          <div class="field-row"><span class="field-label">Completed</span><span class="field-value">16 min</span></div>
+        </div>
+        <div class="panel-footer"><span>recorded exposure</span><span>Tue · 11:42</span></div>
+      </article>
+
+      <article class="source-panel" data-source="team" data-motion-role="source-panel">
+        <div class="panel-heading">
+          <h3 class="panel-title">Team operations</h3>
+          <span class="source-tag">source</span>
+        </div>
+        <div class="source-fields">
+          <div class="field-row"><span class="field-label">Source</span><span class="field-value">Team operations</span></div>
+          <div class="field-row"><span class="field-label">Planned session</span><span class="field-value">Controlled 5v5</span></div>
+          <div class="field-row"><span class="field-label">Planned exposure</span><span class="field-value">18 min</span></div>
+        </div>
+        <div class="panel-footer"><span>planned work</span><span>Tue · 13:15</span></div>
+      </article>
+
+      <article class="source-panel" data-source="history" data-motion-role="source-panel">
+        <div class="panel-heading">
+          <h3 class="panel-title">Decision history</h3>
+          <span class="source-tag">source</span>
+        </div>
+        <div class="source-fields">
+          <div class="field-row"><span class="field-label">Source</span><span class="field-value">Review log</span></div>
+          <div class="field-row"><span class="field-label">Last review</span><span class="field-value">Mon · 17:30</span></div>
+          <div class="field-row"><span class="field-label">Outcome</span><span class="field-value">Staff-authored plan recorded</span></div>
+          <div class="field-row"><span class="field-label">Next checkpoint</span><span class="field-value">Tue · 14:00</span></div>
+        </div>
+        <div class="panel-footer"><span>staff-owned</span><span>Mon · 17:30</span></div>
+      </article>
+
+      <span class="connector" data-connector="medical" data-motion-role="connector" aria-hidden="true"></span>
+      <span class="connector" data-connector="performance" data-motion-role="connector" aria-hidden="true"></span>
+      <span class="connector" data-connector="team" data-motion-role="connector" aria-hidden="true"></span>
+      <span class="connector" data-connector="history" data-motion-role="connector" aria-hidden="true"></span>
+
+      <section class="decision-node" data-motion-role="dly-node" aria-label="DLY decision layer inactive">
+        <p class="node-label">DLY decision layer</p>
+        <p class="node-state">No review context yet</p>
+      </section>
+
+      <p class="case-line" data-motion-role="case-line"><strong>RTP-017</strong>Next team exposure needs review.</p>
+      <div class="matching-keys" data-motion-role="matching-keys" aria-hidden="true"><span>athlete</span><span>time</span><span>session</span></div>
+
+      <section class="context-packet" data-motion-role="reviewable-context" aria-hidden="true" aria-label="Reviewable context packet prepared for the final motion scene">
+        <div class="packet-plan">
+          <p class="packet-status">Reviewable context</p>
+          <p class="packet-case">RTP-017 / Next team exposure needs review</p>
+          <p class="field-label">Planned next exposure</p>
+          <p class="plan-value">Controlled 5v5 · 18 min</p>
+          <p class="packet-meta">Illustrative workflow · staff review pending</p>
+        </div>
+        <div class="packet-evidence">
+          <article class="evidence-card">
+            <div class="evidence-heading"><p class="field-label">Evidence</p><h3>Medical boundary</h3></div>
+            <p class="evidence-value">Review before uncontrolled 5v5</p>
+            <span class="evidence-time">Medical team · Tue 12:18</span>
+          </article>
+          <article class="evidence-card">
+            <div class="evidence-heading"><p class="field-label">Evidence</p><h3>Recent exposure</h3></div>
+            <p class="evidence-value">Controlled 4v4 · 16 min completed</p>
+            <span class="evidence-time">Performance system · Tue 11:42</span>
+          </article>
+          <article class="evidence-card">
+            <div class="evidence-heading"><p class="field-label">Evidence</p><h3>Team requirement</h3></div>
+            <p class="evidence-value">Controlled 5v5 · 18 min planned</p>
+            <span class="evidence-time">Team operations · Tue 13:15</span>
+          </article>
+          <div class="staff-status"><span class="field-label">Staff decision</span><span>Not set</span></div>
+        </div>
+        <aside class="dashboard-preview" aria-label="Operational dashboard preview">
+          <div class="preview-window" aria-hidden="true">
+            <span class="preview-bar"></span>
+            <span class="preview-row is-accent"></span>
+            <span class="preview-row"></span>
+            <span class="preview-row"></span>
+          </div>
+          <p>Operational dashboard<br>preview</p>
+        </aside>
+      </section>
+
+      <section class="handoff-screen" data-motion-role="dashboard-handoff" aria-hidden="true" aria-label="Operational dashboard review entry preview">
+        <div class="handoff-header">
+          <p class="handoff-kicker">Operational dashboard</p>
+          <p class="handoff-kicker">RTP review</p>
+        </div>
+        <div class="handoff-title-row">
+          <h3 class="handoff-title">Review entry</h3>
+          <p>Context available</p>
+        </div>
+        <div class="handoff-row is-entry"><strong>RTP-017 · Controlled 5v5</strong><span>Staff review</span></div>
+        <div class="handoff-row"><strong>Attributable evidence attached</strong><span>3 sources</span></div>
+        <div class="handoff-row"><strong>Decision</strong><span>Not set</span></div>
+      </section>
+    </section>
+
+    <section class="shell motion-controls" aria-label="Infrastructure demo playback controls">
+      <p class="motion-status" id="motion-status" role="status" aria-live="polite"><strong>Scene 01</strong> · Fragmented inputs</p>
+      <div class="motion-actions">
+        <button class="motion-button is-primary" type="button" data-motion-control="play">Play</button>
+        <button class="motion-button" type="button" data-motion-control="pause">Pause</button>
+        <button class="motion-button" type="button" data-motion-control="replay">Replay</button>
+        <button class="motion-button" type="button" data-motion-control="skip">Skip to review context</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="shell page-footer">
+    <p class="footer-label">DLY role</p>
+    <p class="footer-copy">Systems record work. <strong>DLY makes the decision context reviewable.</strong> Staff make the decision.</p>
+  </footer>
+  <script src="./infrastructure.js" defer></script>
+</body>
+</html>
