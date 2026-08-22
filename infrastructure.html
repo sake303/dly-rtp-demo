@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-demo-locales="en ko">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -70,6 +70,13 @@
       border-bottom: 1px solid var(--line);
     }
 
+    .header-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      margin-left: auto;
+    }
+
     .brand {
       color: var(--text);
       font-family: var(--mono);
@@ -98,6 +105,61 @@
     }
 
     .status-label { white-space: nowrap; }
+
+    .locale-switcher {
+      display: inline-flex;
+      border: 1px solid var(--line-strong);
+      font-family: var(--mono);
+      font-size: .62rem;
+      letter-spacing: .08em;
+      line-height: 1;
+    }
+
+    .locale-link {
+      display: grid;
+      min-width: 36px;
+      min-height: 30px;
+      place-items: center;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color var(--motion-micro) var(--ease-ui), background var(--motion-micro) var(--ease-ui);
+    }
+
+    .locale-link + .locale-link { border-left: 1px solid var(--line-strong); }
+    .locale-link:hover { color: var(--text); background: var(--accent-soft); }
+    .locale-link[aria-current="page"] { color: var(--bg); background: var(--accent); }
+
+    html:lang(ko) .status-label,
+    html:lang(ko) .eyebrow,
+    html:lang(ko) .source-tag,
+    html:lang(ko) .field-label,
+    html:lang(ko) .packet-status,
+    html:lang(ko) .packet-meta,
+    html:lang(ko) .footer-label,
+    html:lang(ko) .locale-switcher,
+    html:lang(ko) .motion-button,
+    html:lang(ko) .motion-status,
+    html:lang(ko) .handoff-kicker {
+      font-family: var(--sans);
+      letter-spacing: normal;
+      text-transform: none;
+    }
+
+    html:lang(ko) h1,
+    html:lang(ko) .stage-caption,
+    html:lang(ko) .field-value,
+    html:lang(ko) .evidence-value,
+    html:lang(ko) .footer-copy {
+      overflow-wrap: normal;
+      word-break: keep-all;
+    }
+
+    html:lang(ko) h1 {
+      max-width: 900px;
+      font-size: clamp(3rem, 5.1vw, 5.15rem);
+      letter-spacing: -.06em;
+      line-height: 1.02;
+    }
 
     .intro {
       display: grid;
@@ -475,7 +537,7 @@
       right: 12px;
       bottom: 10px;
       color: var(--text);
-      content: attr(data-source);
+      content: attr(data-source-label);
       font-family: var(--mono);
       font-size: .56rem;
       letter-spacing: .06em;
@@ -540,6 +602,7 @@
     .footer-label { grid-column: 1 / span 2; margin: 0; }
     .footer-copy { grid-column: 3 / span 8; margin: 0; color: var(--text); font-size: clamp(1.08rem, 2vw, 1.5rem); font-weight: 500; letter-spacing: -.03em; line-height: 1.28; }
     .footer-copy strong { color: var(--text); font-weight: 600; }
+    html:lang(ko) .footer-copy { grid-column: 3 / span 9; }
 
     @media (max-width: 900px) {
       .intro-copy { grid-column: 1 / span 9; }
@@ -555,6 +618,8 @@
 
     @media (max-width: 640px) {
       .site-header { min-height: 62px; }
+      .site-header .status-label { display: none; }
+      .header-actions { gap: 8px; }
       .status-label { font-size: .56rem; }
       .intro { display: block; padding-block: 54px 44px; }
       h1 { max-width: 510px; font-size: clamp(2.75rem, 14vw, 4.4rem); }
@@ -617,6 +682,11 @@
       body[data-motion-ready="true"] .stage[data-beat="connect-context"] .source-panel[data-source="team"] { top: 164px; left: 76%; }
       body[data-motion-ready="true"] .stage[data-beat="review-moment"] .source-panel[data-source="history"],
       body[data-motion-ready="true"] .stage[data-beat="connect-context"] .source-panel[data-source="history"] { top: 392px; left: 75%; }
+      body[data-motion-ready="true"] .stage[data-beat="review-moment"] .source-panel[data-source="medical"],
+      body[data-motion-ready="true"] .stage[data-beat="review-moment"] .source-panel[data-source="performance"],
+      body[data-motion-ready="true"] .stage[data-beat="review-moment"] .source-panel[data-source="team"] { opacity: 0; pointer-events: none; }
+      body[data-motion-ready="true"] .stage[data-beat="review-moment"] .source-panel[data-source="history"] { top: 142px; left: 16px; transform: translate(0); opacity: 1; }
+      body[data-motion-ready="true"] .stage[data-beat="review-moment"] .case-line { top: 446px; }
       body[data-motion-ready="true"] .stage[data-beat="connect-context"] .source-panel::after { opacity: 1; transform: scale(3.7); transform-origin: right bottom; }
       body[data-motion-ready="true"] .context-packet { grid-template-columns: 1fr; }
       body[data-motion-ready="true"] .context-packet .packet-plan { border-right: 0; border-bottom: 1px solid var(--line); }
@@ -630,6 +700,11 @@
       body[data-motion-ready="true"] .stage[data-beat="dashboard-handoff"] .handoff-screen { transform: translate(-50%, -50%) scale(1); }
       .motion-controls { grid-template-columns: 1fr; gap: 14px; }
       .motion-actions { justify-content: flex-start; }
+      html:lang(ko) h1 {
+        max-width: 305px;
+        font-size: clamp(2.3rem, 10.2vw, 3.25rem);
+        line-height: 1.08;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -648,7 +723,13 @@
 <body>
   <header class="shell site-header">
     <a class="brand" href="./" aria-label="Return to DLY RTP dashboard">DLY <span>/ Infrastructure demo</span></a>
-    <p class="status-label">RTP review context</p>
+    <div class="header-actions">
+      <p class="status-label">RTP review context</p>
+      <nav class="locale-switcher" aria-label="Language">
+        <a class="locale-link" id="locale-en" href="./infrastructure.html?lang=en" hreflang="en" lang="en" aria-current="page">EN</a>
+        <a class="locale-link" id="locale-ko" href="./infrastructure.html?lang=ko" hreflang="ko" lang="ko">KO</a>
+      </nav>
+    </div>
   </header>
 
   <main>
