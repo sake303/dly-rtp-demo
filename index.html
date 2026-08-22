@@ -930,12 +930,40 @@
     }
 
     .hero {
+      position: relative;
       display: grid;
       grid-template-columns: repeat(12, minmax(0, 1fr));
       min-height: 70vh;
       padding-block: clamp(38px, 7vw, 88px) clamp(54px, 8vw, 104px);
       border-bottom: 1px solid var(--line-strong);
     }
+
+    .locale-switcher {
+      position: absolute;
+      top: 20px;
+      right: var(--gutter);
+      display: inline-flex;
+      border: 1px solid var(--line-strong);
+      background: color-mix(in srgb, var(--bg) 82%, transparent);
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .09em;
+      line-height: 1;
+    }
+
+    .locale-link {
+      display: grid;
+      min-width: 38px;
+      min-height: 30px;
+      place-items: center;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color var(--motion-micro) var(--ease-ui), background var(--motion-micro) var(--ease-ui);
+    }
+
+    .locale-link + .locale-link { border-left: 1px solid var(--line-strong); }
+    .locale-link:hover { color: var(--text); background: var(--accent-soft); }
+    .locale-link[aria-current="page"] { color: var(--bg); background: var(--accent); }
 
     .eyebrow {
       grid-column: 1 / -1;
@@ -1021,6 +1049,8 @@
       overflow-wrap: normal;
       word-break: keep-all;
     }
+
+    .keep-together { white-space: nowrap; }
 
     .controls-wrap {
       position: sticky;
@@ -1669,7 +1699,7 @@
         gap: var(--console-space-1);
         padding: var(--console-space-4) var(--console-space-5);
       }
-      .hero { display: block; padding-block: 32px 60px; }
+      .hero { display: block; padding: 76px 0 60px; }
       .eyebrow { margin-bottom: 88px; }
       .hero h1 { font-size: clamp(3rem, 15vw, 4.7rem); }
       .hero-copy { margin-top: 52px; padding-left: 16px; }
@@ -1710,6 +1740,10 @@
 </head>
 <body data-step="0" data-show-sources="false">
   <header class="shell hero">
+    <nav class="locale-switcher" id="locale-switcher" aria-label="Language">
+      <a class="locale-link" id="locale-en" href="./?lang=en" hreflang="en" lang="en" aria-current="page">EN</a>
+      <a class="locale-link" id="locale-ko" href="./?lang=ko" hreflang="ko" lang="ko">KO</a>
+    </nav>
     <p class="eyebrow" id="eyebrow">DLY / RTP PROGRESSION CONTEXT / ILLUSTRATIVE PROTOTYPE</p>
     <h1 id="hero-title">What context could <em>change</em> the next exposure?</h1>
     <p class="hero-copy" id="hero-copy"><strong>DLY brings scattered exposure, response, and staff context into one review surface</strong> before qualified staff decide to progress, hold, or modify.</p>
@@ -1749,7 +1783,8 @@
         documentDescription: "자격을 갖춘 퍼포먼스 스태프를 위한 예시 RTP 진행 판단 맥락 워크플로우입니다.",
         eyebrow: "",
         heroTitle: "DLY: 퍼포먼스와 RTP 팀을 위한 Decision Layer",
-        heroCopy: "DLY는 다음 부하를 진행할지, 보류할지, 조정할지 판단할 때 필요한 맥락을 한곳에 모읍니다.",
+        heroCopy: "DLY는 다음 부하를 진행할지, 보류할지, 조정할지 판단할 때 <span class=\"keep-together\">필요한 맥락을</span> 한곳에 모읍니다.",
+        languageNavigation: "언어 선택",
         scenarioControls: "시나리오 제어",
         play: "▶ 시나리오 재생", pause: "Ⅱ 일시 정지", previous: "이전", next: "다음", showSources: "출처 보기", hideSources: "출처 숨기기", reset: "초기화",
         loadingSystem: "예시 퍼포먼스 시스템 화면을 불러오는 중…", loadingScenario: "예시 시나리오를 불러오는 중…",
@@ -1829,6 +1864,9 @@
       const app = document.getElementById("app");
       const reviewRoot = document.getElementById("review-root");
       const performanceSystemRoot = document.getElementById("performance-system");
+      const localeSwitcher = document.getElementById("locale-switcher");
+      const localeEn = document.getElementById("locale-en");
+      const localeKo = document.getElementById("locale-ko");
       const playButton = document.getElementById("play-button");
       const previousButton = document.getElementById("previous-button");
       const nextButton = document.getElementById("next-button");
@@ -1848,6 +1886,11 @@
       }
 
       function applyStaticCopy() {
+        localeSwitcher.setAttribute("aria-label", t("languageNavigation", "Language"));
+        const activeLocaleLink = isKorean ? localeKo : localeEn;
+        const inactiveLocaleLink = isKorean ? localeEn : localeKo;
+        activeLocaleLink.setAttribute("aria-current", "page");
+        inactiveLocaleLink.removeAttribute("aria-current");
         if (!isKorean) return;
         document.documentElement.lang = "ko";
         document.title = COPY.documentTitle;

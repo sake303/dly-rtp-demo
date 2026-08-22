@@ -27,6 +27,7 @@ The source design contract is [`DLY-decision-layer/DESIGN.md`](/Users/mattlee/DL
 ## Primitives and behavior
 
 - Hero: identifies DLY as a decision layer for performance and RTP teams, not a clinical conclusion.
+- Locale switcher: a compact `EN` / `KO` control in the hero's upper-right corner links to the equivalent locale route and marks the active language without interrupting the review flow.
 - Controls: the top scenario controls disclose context over four ordered steps. Play, previous, next, and reset are the only scenario navigation; the redundant lower timeline is intentionally absent.
 - Performance console: an illustrative source system, visually distinct but not presented as live data.
 - Context notification: appears only after reviewable context arrives.
