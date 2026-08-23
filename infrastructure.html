@@ -154,7 +154,6 @@
     }
 
     html:lang(ko) h1,
-    html:lang(ko) .stage-caption,
     html:lang(ko) .field-value,
     html:lang(ko) .evidence-value,
     html:lang(ko) .footer-copy {
@@ -242,22 +241,6 @@
       inset: auto 18% 0;
       height: 34%;
       background: linear-gradient(180deg, transparent, rgb(255 255 255 / 3%));
-    }
-
-    .stage-caption {
-      position: absolute;
-      z-index: 2;
-      top: 20px;
-      left: 50%;
-      width: min(245px, 24vw);
-      margin: 0;
-      color: var(--muted);
-      font-family: var(--mono);
-      font-size: .7rem;
-      letter-spacing: .05em;
-      line-height: 1.6;
-      text-align: center;
-      transform: translateX(-50%);
     }
 
     .source-panel {
@@ -635,7 +618,6 @@
       .stage { display: grid; min-height: 0; gap: 14px; padding: 20px 0; overflow: visible; }
       .stage::before { background-size: 100% 100%, 100% 84px; }
       .stage::after { inset: auto 0 0; height: 20%; }
-      .stage-caption { position: static; order: -1; width: auto; margin: 4px auto 6px; transform: none; }
       .source-panel { position: relative; width: auto; min-height: 0; padding: 18px; }
       .source-panel[data-source] { inset: auto; }
       .connector { display: none; }
@@ -652,7 +634,6 @@
       .footer-copy { margin-top: 12px; }
 
       body[data-motion-ready="true"] .stage { display: block; min-height: 560px; padding: 0; overflow: hidden; }
-      body[data-motion-ready="true"] .stage-caption { position: absolute; top: 20px; left: 50%; width: min(255px, calc(100% - 48px)); transform: translateX(-50%); }
       body[data-motion-ready="true"] .source-panel { position: absolute; width: calc(100% - 32px); min-height: 0; padding: 18px; }
       body[data-motion-ready="true"] .source-panel[data-source="medical"] { top: 72px; left: 16px; }
       body[data-motion-ready="true"] .source-panel[data-source="performance"] { top: 166px; left: 16px; }
@@ -753,8 +734,7 @@
       <p class="intro-note">Illustrative records only.<br>Not a medical recommendation.</p>
     </section>
 
-    <section class="shell stage" aria-labelledby="stage-title" data-scene="fragmented-inputs">
-      <h2 id="stage-title" class="stage-caption">Four systems hold a piece of the same review moment.</h2>
+    <section class="shell stage" aria-label="Infrastructure demo stage" data-scene="fragmented-inputs">
 
       <article class="source-panel" data-source="medical" data-motion-role="source-panel">
         <div class="panel-heading">

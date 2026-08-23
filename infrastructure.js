@@ -95,20 +95,21 @@
       'Return to DLY RTP dashboard': 'DLY RTP 대시보드로 돌아가기',
       'Language': '언어 선택',
       'DLY inactive': 'DLY 비활성',
+      'Infrastructure demo stage': '인프라 데모 장면',
       'Reviewable context packet prepared for the final motion scene': '마지막 모션 장면을 위해 준비된 검토 가능한 맥락 패킷',
       'Operational dashboard preview': '운영 대시보드 미리보기',
       'Operational dashboard review entry preview': '운영 대시보드 검토 항목 미리보기',
       'Infrastructure demo playback controls': '인프라 데모 재생 제어'
     },
     beats: {
-      fragmentedInputs: { label: '분산된 입력', caption: '하나의 시스템에서 판단이 시작되는 경우는 드뭅니다.', nodeState: '아직 검토 맥락 없음' },
-      medicalBoundary: { label: '메디컬 맥락', caption: '', nodeState: '메디컬 경계 확인 가능' },
-      recentExposure: { label: '최근 노출', caption: '최근 노출\n통제된 4대4\n16분 · 완료', nodeState: '두 기록은 분리된 상태' },
-      teamRequirement: { label: '팀 요구사항', caption: '팀 요구사항\n통제된 5대5\n18분 · 예정', nodeState: '계획된 훈련은 검토가 필요함' },
-      reviewMoment: { label: '검토 순간', caption: '이전 검토\n스태프 소유 판단\n마지막 검토 · 월 17:30', nodeState: '검토 맥락이 아직 완전하지 않음', subCaption: 'RTP-017\n다음 팀 노출은 검토가 필요합니다.' },
-      connectContext: { label: 'DLY가 맥락을 연결', caption: 'DLY는 판단 주변의 맥락을 연결합니다.', nodeState: '관련 맥락을 연결하는 중', subCaption: '관련 맥락. 출처가 명확한 기록.', readyState: '검토 맥락 준비됨' },
-      reviewableContext: { label: '검토 가능한 맥락', caption: '검토 가능한 맥락\n계획 · 통제된 5대5 · 18분\n메디컬 경계 · 최근 노출 · 팀 요구사항', nodeState: '검토 맥락 준비됨', subCaption: '스태프 검토를 위한 맥락이 준비되었습니다.\n판단은 여전히 스태프의 몫입니다.' },
-      dashboardHandoff: { label: '대시보드로 전달', caption: '시스템 기록에서 검토 순간으로.', nodeState: '검토 맥락 준비됨', subCaption: '시스템은 업무를 기록합니다.\nDLY는 판단 맥락을 검토 가능하게 만듭니다.\n스태프가 판단합니다.' }
+      fragmentedInputs: { label: '분산된 입력', nodeState: '아직 검토 맥락 없음' },
+      medicalBoundary: { label: '메디컬 맥락', nodeState: '메디컬 경계 확인 가능' },
+      recentExposure: { label: '최근 노출', nodeState: '두 기록은 분리된 상태' },
+      teamRequirement: { label: '팀 요구사항', nodeState: '계획된 훈련은 검토가 필요함' },
+      reviewMoment: { label: '검토 순간', nodeState: '검토 맥락이 아직 완전하지 않음' },
+      connectContext: { label: 'DLY가 맥락을 연결', nodeState: '관련 맥락을 연결하는 중', readyState: '검토 맥락 준비됨' },
+      reviewableContext: { label: '검토 가능한 맥락', nodeState: '검토 맥락 준비됨' },
+      dashboardHandoff: { label: '대시보드로 전달', nodeState: '검토 맥락 준비됨' }
     }
   };
 
@@ -133,7 +134,6 @@
   };
 
   const stage = document.querySelector('.stage');
-  const stageTitle = document.getElementById('stage-title');
   const status = document.getElementById('motion-status');
   const sourcePanels = [...document.querySelectorAll('[data-motion-role="source-panel"]')];
   const node = document.querySelector('[data-motion-role="dly-node"]');
@@ -145,7 +145,7 @@
   const controls = Object.fromEntries([...document.querySelectorAll('[data-motion-control]')].map(button => [button.dataset.motionControl, button]));
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  if (!stage || !stageTitle || !status || !node || !nodeState || !packet || !handoff || !caseLine || !matchingKeys) return;
+  if (!stage || !status || !node || !nodeState || !packet || !handoff || !caseLine || !matchingKeys) return;
 
   localizeStaticContent();
   const sourceLabels = isKorean
@@ -174,7 +174,6 @@
     {
       id: 'fragmented-inputs',
       label: fragmentedInputs?.label ?? 'Fragmented inputs',
-      caption: fragmentedInputs?.caption ?? 'A decision rarely starts in one system.',
       duration: 2500,
       sources: [],
       nodeState: fragmentedInputs?.nodeState ?? 'No review context yet'
@@ -182,7 +181,6 @@
     {
       id: 'medical-boundary',
       label: medicalBoundary?.label ?? 'Medical context',
-      caption: medicalBoundary?.caption ?? '',
       duration: 4500,
       sources: ['medical'],
       nodeState: medicalBoundary?.nodeState ?? 'Medical boundary available'
@@ -190,7 +188,6 @@
     {
       id: 'recent-exposure',
       label: recentExposure?.label ?? 'Recent exposure',
-      caption: recentExposure?.caption ?? 'RECENT EXPOSURE\nControlled 4v4\n16 min · completed',
       duration: 4500,
       sources: ['medical', 'performance'],
       nodeState: recentExposure?.nodeState ?? 'Two records remain separate'
@@ -198,7 +195,6 @@
     {
       id: 'team-requirement',
       label: teamRequirement?.label ?? 'Team requirement',
-      caption: teamRequirement?.caption ?? 'TEAM REQUIREMENT\nControlled 5v5\n18 min · planned',
       duration: 4500,
       sources: ['medical', 'performance', 'team'],
       nodeState: teamRequirement?.nodeState ?? 'Planned work needs review'
@@ -206,26 +202,22 @@
     {
       id: 'review-moment',
       label: reviewMoment?.label ?? 'Review moment',
-      caption: reviewMoment?.caption ?? 'PREVIOUS REVIEW\nStaff-owned decision\nLast reviewed · Mon 17:30',
       duration: 9000,
       sources: ['medical', 'performance', 'team', 'history'],
       nodeState: reviewMoment?.nodeState ?? 'Review context is incomplete',
       subphase: {
         after: 4000,
-        caption: reviewMoment?.subCaption ?? 'RTP-017\nNext team exposure needs review.',
         showCase: true
       }
     },
     {
       id: 'connect-context',
       label: connectContext?.label ?? 'DLY connects context',
-      caption: connectContext?.caption ?? 'DLY connects the context around a decision.',
       duration: 13000,
       sources: ['medical', 'performance', 'team', 'history'],
       nodeState: connectContext?.nodeState ?? 'Matching relevant context',
       subphase: {
         after: 8000,
-        caption: connectContext?.subCaption ?? 'Relevant context. Attributable sources.',
         showKeys: true,
         nodeState: connectContext?.readyState ?? 'Review context ready'
       }
@@ -233,25 +225,21 @@
     {
       id: 'reviewable-context',
       label: reviewableContext?.label ?? 'Reviewable context',
-      caption: reviewableContext?.caption ?? 'REVIEWABLE CONTEXT\nPlan · controlled 5v5 · 18 min\nMedical boundary · Recent exposure · Team requirement',
       duration: 13000,
       sources: ['medical', 'performance', 'team', 'history'],
       nodeState: reviewableContext?.nodeState ?? 'Review context ready',
       subphase: {
         after: 8000,
-        caption: reviewableContext?.subCaption ?? 'The context is ready for staff review.\nThe decision is still theirs.'
       }
     },
     {
       id: 'dashboard-handoff',
       label: dashboardHandoff?.label ?? 'Dashboard handoff',
-      caption: dashboardHandoff?.caption ?? 'From system records to a review moment.',
       duration: 7000,
       sources: ['medical', 'performance', 'team', 'history'],
       nodeState: dashboardHandoff?.nodeState ?? 'Review context ready',
       subphase: {
         after: 4000,
-        caption: dashboardHandoff?.subCaption ?? 'Systems record work.\nDLY makes the decision context reviewable.\nStaff make the decision.'
       }
     }
   ];
@@ -266,10 +254,6 @@
     window.clearTimeout(subphaseTimer);
     beatTimer = 0;
     subphaseTimer = 0;
-  };
-
-  const setCaption = caption => {
-    stageTitle.innerHTML = caption.split('\n').map(line => `<span>${line}</span>`).join('<br>');
   };
 
   const updateControls = () => {
@@ -292,8 +276,6 @@
     stage.dataset.beat = beat.id;
     stage.dataset.scene = beat.id;
     stage.dataset.ready = packetVisible ? 'true' : 'false';
-    stageTitle.dataset.scene = beat.id;
-    setCaption(beat.caption);
     nodeState.textContent = beat.nodeState;
     packet.setAttribute('aria-hidden', String(!packetVisible));
     handoff.setAttribute('aria-hidden', String(!handoffVisible));
@@ -307,11 +289,10 @@
     });
 
     updateStatus(beat);
-    if (announce) status.setAttribute('aria-label', `${beat.label}. ${stageTitle.textContent.replace(/\s+/g, ' ').trim()}`);
+    if (announce) status.setAttribute('aria-label', beat.label);
 
     if (beat.subphase) {
       subphaseTimer = window.setTimeout(() => {
-        setCaption(beat.subphase.caption);
         if (beat.subphase.showCase) caseLine.classList.add('is-visible');
         if (beat.subphase.showKeys) {
           matchingKeys.classList.add('is-visible');
