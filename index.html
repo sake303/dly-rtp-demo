@@ -1116,6 +1116,7 @@
 
     .infrastructure-bridge-copy > div { grid-column: 1 / span 8; }
     .infrastructure-bridge-copy p { max-width: 56ch; margin: 12px 0 0; color: var(--muted); }
+    html:lang(ko) .infrastructure-bridge-copy p { overflow-wrap: normal; word-break: keep-all; }
     .infrastructure-bridge-copy h2 { margin: 0; font-size: clamp(2rem, 4vw, 4.3rem); font-weight: 560; letter-spacing: -.055em; line-height: 1; }
 
     .infrastructure-frame {
@@ -1851,7 +1852,7 @@
         heroTitle: "DLY: 퍼포먼스와 RTP 팀을 위한 Decision Layer",
         heroCopy: "RTP 결정 전, 스태프는 여러 데이터를 바탕으로 기존 계획을 바꿔야 하는지 검토합니다. DLY는 그때 필요한 메디컬 맥락, 최근 훈련 기록, 팀 요구사항을 한 화면에 정리합니다.",
         infrastructureTitle: "결정에 필요한 데이터는 여러 시스템에 <span class=\"keep-together\">흩어져 있습니다.</span>",
-        infrastructureCopy: "DLY는 출처가 남는 기록을 하나의 스태프 검토 순간 주위로 정리하고, 대시보드는 그 맥락을 실제 워크플로우로 이어줍니다.",
+        infrastructureCopy: "DLY는 여러 시스템의 기록과 그 근거를 스태프 검토에 필요한 맥락으로 정리해, 기존 워크플로우 안에서 확인할 수 있게 합니다.",
         infrastructureFrame: "DLY 인프라 데모",
         languageNavigation: "언어 선택",
         scenarioControls: "시나리오 제어",
