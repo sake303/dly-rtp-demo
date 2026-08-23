@@ -261,9 +261,9 @@
     controls.pause.disabled = !isPlaying;
   };
 
-  const updateStatus = beat => {
+  const updateStatus = () => {
     const position = String(currentIndex + 1).padStart(2, '0');
-    status.innerHTML = `<strong>${isKorean ? COPY.scene : 'Scene'} ${position}</strong> · ${beat.label}`;
+    status.innerHTML = `<strong>${isKorean ? COPY.scene : 'Scene'} ${position}</strong>`;
   };
 
   const setBeat = (index, { announce = true } = {}) => {
@@ -288,8 +288,8 @@
       panel.classList.toggle('is-revealed', beat.sources.includes(panel.dataset.source));
     });
 
-    updateStatus(beat);
-    if (announce) status.setAttribute('aria-label', beat.label);
+    updateStatus();
+    if (announce) status.setAttribute('aria-label', `${isKorean ? COPY.scene : 'Scene'} ${String(currentIndex + 1).padStart(2, '0')}`);
 
     if (beat.subphase) {
       subphaseTimer = window.setTimeout(() => {
