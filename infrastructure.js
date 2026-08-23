@@ -6,6 +6,9 @@
     documentDescription: '스태프가 소유한 RTP 검토 주변의 출처 있는 맥락을 보여주는 예시 DLY 인프라 화면입니다.',
     scene: '장면',
     medicalSourceLabel: '부서',
+    performanceSourceLabel: '시스템',
+    teamSourceLabel: '부서',
+    historySourceLabel: '기록',
     text: {
       '/ Infrastructure demo': '/ 인프라 데모',
       'RTP review context': 'RTP 검토 맥락',
@@ -29,29 +32,29 @@
       'Tue · 14:00': '화 · 14:00',
       'staff-entered': '기록 시각',
       'Tue · 12:18': '화 · 12:18',
-      'Performance exposure': '퍼포먼스 노출',
+      'Performance exposure': '최근 훈련 기록',
       'Performance system': '퍼포먼스 시스템',
-      'Session': '세션',
-      'Controlled 4v4': '통제된 4대4',
-      'Completed': '완료',
+      'Session': '훈련 형태',
+      'Controlled 4v4': '제한된 4대4',
+      'Completed': '진행 시간',
       '16 min': '16분',
-      'recorded exposure': '기록된 노출',
+      'recorded exposure': '기록 시각',
       'Tue · 11:42': '화 · 11:42',
       'Team operations': '팀 운영',
       'Planned session': '계획된 세션',
-      'Controlled 5v5': '통제된 5대5',
+      'Controlled 5v5': '제한된 5대5',
       'Planned exposure': '계획된 노출',
       '18 min': '18분',
       'planned work': '계획된 업무',
       'Tue · 13:15': '화 · 13:15',
-      'Decision history': '판단 이력',
-      'Review log': '검토 로그',
+      'Decision history': '히스토리',
+      'Review log': '스태프 기록',
       'Last review': '마지막 검토',
       'Mon · 17:30': '월 · 17:30',
-      'Outcome': '결과',
-      'Staff-authored plan recorded': '스태프가 작성한 계획 기록됨',
-      'Next checkpoint': '다음 확인 시점',
-      'staff-owned': '스태프 소유',
+      'Outcome': '검토 내용',
+      'Staff-authored plan recorded': '스태프가 작성한 계획',
+      'Next checkpoint': '다음 확인',
+      'staff-owned': '작성 시각',
       'No review context yet': '아직 검토 맥락 없음',
       'Next team exposure needs review.': '다음 팀 노출은 검토가 필요합니다.',
       'athlete': '선수',
@@ -60,16 +63,16 @@
       'Context ready': '맥락 준비됨',
       'RTP-017 / Next team exposure needs review': 'RTP-017 / 다음 팀 노출은 검토가 필요합니다',
       'Planned next exposure': '계획된 다음 노출',
-      'Controlled 5v5 · 18 min': '통제된 5대5 · 18분',
+      'Controlled 5v5 · 18 min': '제한된 5대5 · 18분',
       'Illustrative workflow · staff review pending': '예시 워크플로우 · 스태프 검토 대기',
       'Evidence': '근거',
       'Medical boundary': '메디컬 경계',
       'Medical team · Tue 12:18': '메디컬 팀 · 화 12:18',
       'Recent exposure': '최근 노출',
-      'Controlled 4v4 · 16 min completed': '통제된 4대4 · 16분 완료',
+      'Controlled 4v4 · 16 min completed': '제한된 4대4 · 16분 완료',
       'Performance system · Tue 11:42': '퍼포먼스 시스템 · 화 11:42',
       'Team requirement': '팀 요구사항',
-      'Controlled 5v5 · 18 min planned': '통제된 5대5 · 18분 예정',
+      'Controlled 5v5 · 18 min planned': '제한된 5대5 · 18분 예정',
       'Team operations · Tue 13:15': '팀 운영 · 화 13:15',
       'Staff decision': '스태프 판단',
       'Not set': '미설정',
@@ -78,7 +81,7 @@
       'RTP review': 'RTP 검토',
       'Review entry': '검토 항목',
       'Staff review pending': '스태프 검토 대기',
-      'RTP-017 · Controlled 5v5': 'RTP-017 · 통제된 5대5',
+      'RTP-017 · Controlled 5v5': 'RTP-017 · 제한된 5대5',
       'Staff review': '스태프 검토',
       'Attributable evidence attached': '출처 있는 근거 연결됨',
       '3 sources': '출처 3개',
@@ -128,6 +131,9 @@
       node.nodeValue = original.replace(key, COPY.text[key]);
     });
     document.querySelector('[data-source="medical"] .field-label')?.replaceChildren(COPY.medicalSourceLabel);
+    document.querySelector('[data-source="performance"] .field-label')?.replaceChildren(COPY.performanceSourceLabel);
+    document.querySelector('[data-source="team"] .field-label')?.replaceChildren(COPY.teamSourceLabel);
+    document.querySelector('[data-source="history"] .field-label')?.replaceChildren(COPY.historySourceLabel);
     const medicalRestriction = document.querySelector('[data-source="medical"] .field-row:nth-child(4) .field-value');
     if (medicalRestriction) {
       const reviewPhrase = document.createElement('span');
@@ -161,7 +167,7 @@
 
   localizeStaticContent();
   const sourceLabels = isKorean
-    ? { medical: '메디컬', performance: '퍼포먼스', team: '팀 운영', history: '판단 이력' }
+    ? { medical: '메디컬', performance: '퍼포먼스', team: '팀 운영', history: '히스토리' }
     : { medical: 'medical', performance: 'performance', team: 'team operations', history: 'decision history' };
   sourcePanels.forEach(panel => {
     panel.dataset.sourceLabel = sourceLabels[panel.dataset.source];
