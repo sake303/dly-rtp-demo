@@ -5,6 +5,7 @@
     documentTitle: 'DLY · 인프라 데모',
     documentDescription: '스태프가 소유한 RTP 검토 주변의 출처 있는 맥락을 보여주는 예시 DLY 인프라 화면입니다.',
     scene: '장면',
+    medicalSourceLabel: '부서',
     text: {
       '/ Infrastructure demo': '/ 인프라 데모',
       'RTP review context': 'RTP 검토 맥락',
@@ -14,19 +15,19 @@
       'Illustrative records only.': '예시 기록입니다.',
       'Not a medical recommendation.': '의학적 권고가 아닙니다.',
       'Four systems hold a piece of the same review moment.': '네 시스템이 같은 검토 순간의 일부를 각각 보유합니다.',
-      'Medical context': '메디컬 맥락',
+      'Medical context': '메디컬',
       'source': '출처',
       'Source': '출처',
       'Medical team': '메디컬 팀',
-      'Case': '케이스',
-      'RTP-017 · lower-limb recovery pathway': 'RTP-017 · 하지 회복 경로',
-      'Practice status': '훈련 상태',
-      'Controlled team integration': '통제된 팀 훈련 합류',
-      'Restriction': '제한 사항',
-      'Review before uncontrolled 5v5': '통제되지 않은 5대5 전 검토',
-      'Next review': '다음 검토',
+      'Case': '검토 ID',
+      'RTP-017 · lower-limb recovery pathway': 'RTP-017 · 복귀 진행 단계',
+      'Practice status': '팀 훈련 참여',
+      'Controlled team integration': '제한된 팀 훈련 참여',
+      'Restriction': '검토 조건',
+      'Review before uncontrolled 5v5': '제한 없는 5대5 전 검토 필요',
+      'Next review': '다음 확인',
       'Tue · 14:00': '화 · 14:00',
-      'staff-entered': '스태프 입력',
+      'staff-entered': '기록 시각',
       'Tue · 12:18': '화 · 12:18',
       'Performance exposure': '퍼포먼스 노출',
       'Performance system': '퍼포먼스 시스템',
@@ -56,7 +57,7 @@
       'athlete': '선수',
       'time': '시간',
       'session': '세션',
-      'Reviewable context': '검토 가능한 맥락',
+      'Context ready': '맥락 준비됨',
       'RTP-017 / Next team exposure needs review': 'RTP-017 / 다음 팀 노출은 검토가 필요합니다',
       'Planned next exposure': '계획된 다음 노출',
       'Controlled 5v5 · 18 min': '통제된 5대5 · 18분',
@@ -76,7 +77,7 @@
       'preview': '미리보기',
       'RTP review': 'RTP 검토',
       'Review entry': '검토 항목',
-      'Context available': '맥락 준비됨',
+      'Staff review pending': '스태프 검토 대기',
       'RTP-017 · Controlled 5v5': 'RTP-017 · 통제된 5대5',
       'Staff review': '스태프 검토',
       'Attributable evidence attached': '출처 있는 근거 연결됨',
@@ -94,7 +95,6 @@
     attributes: {
       'Return to DLY RTP dashboard': 'DLY RTP 대시보드로 돌아가기',
       'Language': '언어 선택',
-      'DLY inactive': 'DLY 비활성',
       'Infrastructure demo stage': '인프라 데모 장면',
       'Reviewable context packet prepared for the final motion scene': '마지막 모션 장면을 위해 준비된 검토 가능한 맥락 패킷',
       'Operational dashboard preview': '운영 대시보드 미리보기',
@@ -102,14 +102,14 @@
       'Infrastructure demo playback controls': '인프라 데모 재생 제어'
     },
     beats: {
-      fragmentedInputs: { label: '분산된 입력', nodeState: '아직 검토 맥락 없음' },
-      medicalBoundary: { label: '메디컬 맥락', nodeState: '메디컬 경계 확인 가능' },
-      recentExposure: { label: '최근 노출', nodeState: '두 기록은 분리된 상태' },
-      teamRequirement: { label: '팀 요구사항', nodeState: '계획된 훈련은 검토가 필요함' },
-      reviewMoment: { label: '검토 순간', nodeState: '검토 맥락이 아직 완전하지 않음' },
-      connectContext: { label: 'DLY가 맥락을 연결', nodeState: '관련 맥락을 연결하는 중', readyState: '검토 맥락 준비됨' },
-      reviewableContext: { label: '검토 가능한 맥락', nodeState: '검토 맥락 준비됨' },
-      dashboardHandoff: { label: '대시보드로 전달', nodeState: '검토 맥락 준비됨' }
+      fragmentedInputs: { label: '분산된 입력', nodeState: '' },
+      medicalBoundary: { label: '메디컬 맥락', nodeState: '' },
+      recentExposure: { label: '최근 노출', nodeState: '' },
+      teamRequirement: { label: '팀 요구사항', nodeState: '' },
+      reviewMoment: { label: '검토 순간', nodeState: '' },
+      connectContext: { label: 'DLY가 맥락을 연결', nodeState: '' },
+      reviewableContext: { label: '검토 가능한 맥락', nodeState: '맥락 준비됨' },
+      dashboardHandoff: { label: '대시보드로 전달', nodeState: '맥락 준비됨' }
     }
   };
 
@@ -127,6 +127,18 @@
       if (!COPY.text[key]) return;
       node.nodeValue = original.replace(key, COPY.text[key]);
     });
+    document.querySelector('[data-source="medical"] .field-label')?.replaceChildren(COPY.medicalSourceLabel);
+    const medicalRestriction = document.querySelector('[data-source="medical"] .field-row:nth-child(4) .field-value');
+    if (medicalRestriction) {
+      const reviewPhrase = document.createElement('span');
+      reviewPhrase.className = 'keep-together';
+      reviewPhrase.textContent = '전 검토 필요';
+      medicalRestriction.replaceChildren('제한 없는 5대5 ', reviewPhrase);
+    }
+    const packetCase = document.querySelector('.packet-case');
+    if (packetCase) {
+      packetCase.replaceChildren('RTP-017 / 다음 팀 노출은', document.createElement('br'), '검토가 필요합니다');
+    }
     document.querySelectorAll('[aria-label]').forEach(element => {
       const label = element.getAttribute('aria-label');
       if (COPY.attributes[label]) element.setAttribute('aria-label', COPY.attributes[label]);
@@ -176,35 +188,35 @@
       label: fragmentedInputs?.label ?? 'Fragmented inputs',
       duration: 2500,
       sources: [],
-      nodeState: fragmentedInputs?.nodeState ?? 'No review context yet'
+      nodeState: fragmentedInputs?.nodeState ?? ''
     },
     {
       id: 'medical-boundary',
       label: medicalBoundary?.label ?? 'Medical context',
       duration: 4500,
       sources: ['medical'],
-      nodeState: medicalBoundary?.nodeState ?? 'Medical boundary available'
+      nodeState: medicalBoundary?.nodeState ?? ''
     },
     {
       id: 'recent-exposure',
       label: recentExposure?.label ?? 'Recent exposure',
       duration: 4500,
       sources: ['medical', 'performance'],
-      nodeState: recentExposure?.nodeState ?? 'Two records remain separate'
+      nodeState: recentExposure?.nodeState ?? ''
     },
     {
       id: 'team-requirement',
       label: teamRequirement?.label ?? 'Team requirement',
       duration: 4500,
       sources: ['medical', 'performance', 'team'],
-      nodeState: teamRequirement?.nodeState ?? 'Planned work needs review'
+      nodeState: teamRequirement?.nodeState ?? ''
     },
     {
       id: 'review-moment',
       label: reviewMoment?.label ?? 'Review moment',
       duration: 9000,
       sources: ['medical', 'performance', 'team', 'history'],
-      nodeState: reviewMoment?.nodeState ?? 'Review context is incomplete',
+      nodeState: reviewMoment?.nodeState ?? '',
       subphase: {
         after: 4000,
         showCase: true
@@ -215,11 +227,10 @@
       label: connectContext?.label ?? 'DLY connects context',
       duration: 13000,
       sources: ['medical', 'performance', 'team', 'history'],
-      nodeState: connectContext?.nodeState ?? 'Matching relevant context',
+      nodeState: connectContext?.nodeState ?? '',
       subphase: {
         after: 8000,
-        showKeys: true,
-        nodeState: connectContext?.readyState ?? 'Review context ready'
+        showKeys: true
       }
     },
     {
@@ -227,7 +238,7 @@
       label: reviewableContext?.label ?? 'Reviewable context',
       duration: 13000,
       sources: ['medical', 'performance', 'team', 'history'],
-      nodeState: reviewableContext?.nodeState ?? 'Review context ready',
+      nodeState: reviewableContext?.nodeState ?? 'Context ready',
       subphase: {
         after: 8000,
       }
@@ -237,7 +248,7 @@
       label: dashboardHandoff?.label ?? 'Dashboard handoff',
       duration: 7000,
       sources: ['medical', 'performance', 'team', 'history'],
-      nodeState: dashboardHandoff?.nodeState ?? 'Review context ready',
+      nodeState: dashboardHandoff?.nodeState ?? 'Context ready',
       subphase: {
         after: 4000,
       }
@@ -266,6 +277,12 @@
     status.innerHTML = `<strong>${isKorean ? COPY.scene : 'Scene'} ${position}</strong>`;
   };
 
+  const setNodeState = value => {
+    nodeState.textContent = value;
+    nodeState.hidden = !value;
+    node.setAttribute('aria-label', value ? `DLY, ${value}` : 'DLY');
+  };
+
   const setBeat = (index, { announce = true } = {}) => {
     clearTimers();
     currentIndex = Math.max(0, Math.min(index, beats.length - 1));
@@ -276,7 +293,7 @@
     stage.dataset.beat = beat.id;
     stage.dataset.scene = beat.id;
     stage.dataset.ready = packetVisible ? 'true' : 'false';
-    nodeState.textContent = beat.nodeState;
+    setNodeState(beat.nodeState);
     packet.setAttribute('aria-hidden', String(!packetVisible));
     handoff.setAttribute('aria-hidden', String(!handoffVisible));
     packet.style.visibility = packetVisible ? 'visible' : 'hidden';
@@ -298,7 +315,7 @@
           matchingKeys.classList.add('is-visible');
           stage.dataset.ready = 'true';
         }
-        if (beat.subphase.nodeState) nodeState.textContent = beat.subphase.nodeState;
+        if (beat.subphase.nodeState) setNodeState(beat.subphase.nodeState);
       }, reduceMotion.matches ? 120 : beat.subphase.after);
     }
   };

@@ -301,6 +301,8 @@
       text-align: right;
     }
 
+    .keep-together { white-space: nowrap; }
+
     .panel-footer {
       align-self: end;
       margin-top: 17px;
@@ -375,7 +377,9 @@
     .packet-plan,
     .packet-evidence { border-right: 1px solid var(--line); }
 
-    .packet-status { margin: 0 0 28px; color: var(--accent); }
+    .packet-status { display: grid; gap: 5px; margin: 0 0 28px; }
+    .packet-status-product { color: var(--quiet); font-family: var(--mono); font-size: .56rem; letter-spacing: .07em; }
+    .packet-status-state { color: var(--accent); }
     .packet-case { margin: 0 0 28px; color: var(--muted); font-family: var(--mono); font-size: .67rem; line-height: 1.5; }
     .plan-value { margin: 8px 0 0; font-size: 1.1rem; font-weight: 560; letter-spacing: -.025em; line-height: 1.25; }
     .packet-meta { margin: 32px 0 0; color: var(--quiet); }
@@ -414,6 +418,9 @@
     .handoff-row { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
     .handoff-header { margin-bottom: 28px; }
     .handoff-kicker { margin: 0; color: var(--muted); font-family: var(--mono); font-size: .62rem; letter-spacing: .08em; text-transform: uppercase; }
+    .handoff-ready { display: grid; gap: 3px; margin: 0; text-align: right; }
+    .handoff-ready span:first-child { color: var(--quiet); font-family: var(--mono); font-size: .56rem; letter-spacing: .07em; }
+    .handoff-ready span:last-child { color: var(--accent); font-family: var(--mono); font-size: .56rem; letter-spacing: .07em; text-transform: uppercase; }
     .handoff-title { margin: 0; font-size: 1.1rem; font-weight: 560; letter-spacing: -.025em; }
     .handoff-title-row { padding: 15px 0; border-bottom: 1px solid var(--line); }
     .handoff-title-row p { margin: 0; color: var(--muted); font-family: var(--mono); font-size: .63rem; letter-spacing: .06em; text-transform: uppercase; }
@@ -796,9 +803,9 @@
       <span class="connector" data-connector="team" data-motion-role="connector" aria-hidden="true"></span>
       <span class="connector" data-connector="history" data-motion-role="connector" aria-hidden="true"></span>
 
-      <section class="decision-node" data-motion-role="dly-node" aria-label="DLY inactive">
+      <section class="decision-node" data-motion-role="dly-node" aria-label="DLY">
         <p class="node-label">DLY</p>
-        <p class="node-state">No review context yet</p>
+        <p class="node-state" hidden></p>
       </section>
 
       <p class="case-line" data-motion-role="case-line"><strong>RTP-017</strong>Next team exposure needs review.</p>
@@ -806,7 +813,7 @@
 
       <section class="context-packet" data-motion-role="reviewable-context" aria-hidden="true" aria-label="Reviewable context packet prepared for the final motion scene">
         <div class="packet-plan">
-          <p class="packet-status">Reviewable context</p>
+          <p class="packet-status"><span class="packet-status-product">DLY</span><span class="packet-status-state">Context ready</span></p>
           <p class="packet-case">RTP-017 / Next team exposure needs review</p>
           <p class="field-label">Planned next exposure</p>
           <p class="plan-value">Controlled 5v5 · 18 min</p>
@@ -844,11 +851,11 @@
       <section class="handoff-screen" data-motion-role="dashboard-handoff" aria-hidden="true" aria-label="Operational dashboard review entry preview">
         <div class="handoff-header">
           <p class="handoff-kicker">Operational dashboard</p>
-          <p class="handoff-kicker">RTP review</p>
+          <p class="handoff-ready"><span>DLY</span><span>Context ready</span></p>
         </div>
         <div class="handoff-title-row">
           <h3 class="handoff-title">Review entry</h3>
-          <p>Context available</p>
+          <p>Staff review pending</p>
         </div>
         <div class="handoff-row is-entry"><strong>RTP-017 · Controlled 5v5</strong><span>Staff review</span></div>
         <div class="handoff-row"><strong>Attributable evidence attached</strong><span>3 sources</span></div>
