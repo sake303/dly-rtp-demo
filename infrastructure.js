@@ -51,7 +51,6 @@
       'Staff-authored plan recorded': '스태프가 작성한 계획 기록됨',
       'Next checkpoint': '다음 확인 시점',
       'staff-owned': '스태프 소유',
-      'DLY decision layer': 'DLY 판단 레이어',
       'No review context yet': '아직 검토 맥락 없음',
       'Next team exposure needs review.': '다음 팀 노출은 검토가 필요합니다.',
       'athlete': '선수',
@@ -95,7 +94,7 @@
     attributes: {
       'Return to DLY RTP dashboard': 'DLY RTP 대시보드로 돌아가기',
       'Language': '언어 선택',
-      'DLY decision layer inactive': 'DLY 판단 레이어 비활성',
+      'DLY inactive': 'DLY 비활성',
       'Reviewable context packet prepared for the final motion scene': '마지막 모션 장면을 위해 준비된 검토 가능한 맥락 패킷',
       'Operational dashboard preview': '운영 대시보드 미리보기',
       'Operational dashboard review entry preview': '운영 대시보드 검토 항목 미리보기',
@@ -103,7 +102,7 @@
     },
     beats: {
       fragmentedInputs: { label: '분산된 입력', caption: '하나의 시스템에서 판단이 시작되는 경우는 드뭅니다.', nodeState: '아직 검토 맥락 없음' },
-      medicalBoundary: { label: '메디컬 맥락', caption: '메디컬 맥락\n훈련 상태 · 통제된 팀 훈련 합류\n제한 사항 · 통제되지 않은 5대5 전 검토\n다음 검토 · 화 14:00', nodeState: '메디컬 경계 확인 가능' },
+      medicalBoundary: { label: '메디컬 맥락', caption: '', nodeState: '메디컬 경계 확인 가능' },
       recentExposure: { label: '최근 노출', caption: '최근 노출\n통제된 4대4\n16분 · 완료', nodeState: '두 기록은 분리된 상태' },
       teamRequirement: { label: '팀 요구사항', caption: '팀 요구사항\n통제된 5대5\n18분 · 예정', nodeState: '계획된 훈련은 검토가 필요함' },
       reviewMoment: { label: '검토 순간', caption: '이전 검토\n스태프 소유 판단\n마지막 검토 · 월 17:30', nodeState: '검토 맥락이 아직 완전하지 않음', subCaption: 'RTP-017\n다음 팀 노출은 검토가 필요합니다.' },
@@ -183,7 +182,7 @@
     {
       id: 'medical-boundary',
       label: medicalBoundary?.label ?? 'Medical context',
-      caption: medicalBoundary?.caption ?? 'MEDICAL CONTEXT\nPractice status · Controlled team integration\nRestriction · Review before uncontrolled 5v5\nNext review · Tue 14:00',
+      caption: medicalBoundary?.caption ?? '',
       duration: 4500,
       sources: ['medical'],
       nodeState: medicalBoundary?.nodeState ?? 'Medical boundary available'

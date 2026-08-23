@@ -20,6 +20,7 @@ The source design contract is [`DLY-decision-layer/DESIGN.md`](/Users/mattlee/DL
 | Text | `#ecece8` primary, `#9a9ea5` muted, `#7e848d` quiet |
 | Structure | `#233a4b` divider, `#3c566a` strong divider, zero or near-zero radius |
 | Action | restrained blue `#5b7cff`; it marks an available action, never a health score or recommendation |
+| Dashboard data | muted indigo `#6075a9` → `#425685` for activity and recorded-value bars; it is visually quieter than an available action |
 | Type | Instrument Sans for reading; JetBrains Mono for operational labels, states, and controls |
 | Space | outer gutter `clamp(20px, 3.4vw, 48px)`; console spacing increments from 2px to 28px |
 | Motion | 160ms control feedback, 240ms state transition, 520ms evidence reveal; all respect reduced motion |

@@ -110,11 +110,11 @@
       --console-line-strong: var(--line-strong);
       --console-topbar: var(--bg);
       --console-topbar-ink: var(--text);
-      --console-orange: var(--accent);
-      --console-period: rgb(91 124 255 / 18%);
+      --console-orange: #5a70aa;
+      --console-period: rgb(90 112 170 / 18%);
       --console-period-ink: var(--text);
-      --console-green: color-mix(in srgb, var(--accent) 82%, var(--text));
-      --console-green-dark: var(--accent);
+      --console-green: #6075a9;
+      --console-green-dark: #425685;
       --console-selected: var(--accent);
       --console-white: var(--text);
       --console-topbar-muted: rgb(236 236 232 / 70%);
@@ -125,7 +125,7 @@
       --console-table-head: #102535;
       --console-surface-subtle: #0e2433;
       --console-sidebar: #0b1d2b;
-      --console-total: rgb(91 124 255 / 18%);
+      --console-total: rgb(90 112 170 / 18%);
       --console-shadow: 0 24px 80px rgb(0 4 10 / 38%);
       --console-space-1: 4px;
       --console-space-half: 2px;
@@ -1117,7 +1117,6 @@
     .infrastructure-bridge-copy > div { grid-column: 1 / span 8; }
     .infrastructure-bridge-copy p { max-width: 56ch; margin: 12px 0 0; color: var(--muted); }
     .infrastructure-bridge-copy h2 { margin: 0; font-size: clamp(2rem, 4vw, 4.3rem); font-weight: 560; letter-spacing: -.055em; line-height: 1; }
-    .infrastructure-kicker { margin: 0; color: var(--accent); font-family: var(--mono); font-size: 10px; letter-spacing: .09em; text-transform: uppercase; }
 
     .infrastructure-frame {
       display: block;
@@ -1747,6 +1746,12 @@
       .infrastructure-bridge { padding-block: 44px 26px; }
       .infrastructure-bridge-copy { display: block; margin-bottom: 20px; }
       .infrastructure-bridge-copy h2 { font-size: clamp(2rem, 11vw, 3.2rem); line-height: 1.06; }
+      html:lang(ko) .infrastructure-bridge-copy h2 {
+        font-size: clamp(2rem, 9.6vw, 3.2rem);
+        letter-spacing: -.06em;
+        overflow-wrap: normal;
+        word-break: keep-all;
+      }
       .infrastructure-frame { height: 1040px; }
       .eyebrow { margin-bottom: 88px; }
       .hero h1 { font-size: clamp(3rem, 15vw, 4.7rem); }
@@ -1801,8 +1806,7 @@
     <div class="shell">
       <div class="infrastructure-bridge-copy">
         <div>
-          <p class="infrastructure-kicker" id="infrastructure-kicker">DLY / Infrastructure view</p>
-          <h2 id="infrastructure-title">Before a review, context lives across systems.</h2>
+          <h2 id="infrastructure-title">Before a decision, context lives across systems.</h2>
           <p id="infrastructure-copy">DLY brings those attributable records together around one staff-owned review moment, then the dashboard carries that context into the workflow.</p>
         </div>
       </div>
@@ -1846,8 +1850,7 @@
         eyebrow: "",
         heroTitle: "DLY: 퍼포먼스와 RTP 팀을 위한 Decision Layer",
         heroCopy: "DLY는 다음 부하를 진행할지, 보류할지, 조정할지 판단할 때 <span class=\"keep-together\">필요한 맥락을</span> 한곳에 모읍니다.",
-        infrastructureKicker: "DLY / 인프라 뷰",
-        infrastructureTitle: "검토 전의 맥락은 여러 시스템에 흩어져 있습니다.",
+        infrastructureTitle: "결정 전의 맥락은 여러 시스템에 <span class=\"keep-together\">흩어져 있습니다.</span>",
         infrastructureCopy: "DLY는 출처가 남는 기록을 하나의 스태프 검토 순간 주위로 정리하고, 대시보드는 그 맥락을 실제 워크플로우로 이어줍니다.",
         infrastructureFrame: "DLY 인프라 데모",
         languageNavigation: "언어 선택",
@@ -1968,8 +1971,7 @@
         document.getElementById("eyebrow").textContent = COPY.eyebrow;
         document.getElementById("hero-title").innerHTML = COPY.heroTitle;
         document.getElementById("hero-copy").innerHTML = COPY.heroCopy;
-        document.getElementById("infrastructure-kicker").textContent = COPY.infrastructureKicker;
-        document.getElementById("infrastructure-title").textContent = COPY.infrastructureTitle;
+        document.getElementById("infrastructure-title").innerHTML = COPY.infrastructureTitle;
         document.getElementById("infrastructure-copy").textContent = COPY.infrastructureCopy;
         document.getElementById("scenario-controls").setAttribute("aria-label", COPY.scenarioControls);
         reviewNowButton.textContent = COPY.reviewNow;
