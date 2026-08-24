@@ -487,7 +487,7 @@
 
     .motion-status { margin: 0; color: var(--muted); font-family: var(--mono); font-size: .68rem; line-height: 1.5; }
     .motion-status strong { color: var(--text); font-weight: 560; }
-    .motion-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+    .motion-actions { display: flex; min-width: 0; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
 
     .motion-button {
       min-height: 38px;
@@ -695,7 +695,8 @@
       body[data-motion-ready="true"] .stage[data-beat="dashboard-handoff"] .context-packet { transform: translateX(-50%) scale(.82); }
       body[data-motion-ready="true"] .stage[data-beat="dashboard-handoff"] .handoff-screen { transform: translate(-50%, -50%) scale(1); }
       .motion-controls { grid-template-columns: 1fr; gap: 14px; }
-      .motion-actions { justify-content: flex-start; }
+      .motion-actions { display: grid; width: calc(100vw - (var(--gutter) * 2)); grid-template-columns: repeat(3, max-content); justify-content: flex-start; }
+      .motion-button { min-height: 44px; }
       html:lang(ko) h1 {
         max-width: 305px;
         font-size: clamp(2.3rem, 10.2vw, 3.25rem);
@@ -869,6 +870,8 @@
         <button class="motion-button is-primary" type="button" data-motion-control="play">Play</button>
         <button class="motion-button" type="button" data-motion-control="pause">Pause</button>
         <button class="motion-button" type="button" data-motion-control="replay">Replay</button>
+        <button class="motion-button" type="button" data-motion-control="previous">Previous</button>
+        <button class="motion-button" type="button" data-motion-control="next">Next</button>
         <button class="motion-button" type="button" data-motion-control="skip">Skip to review context</button>
       </div>
     </section>

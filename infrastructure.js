@@ -89,6 +89,8 @@
       'Play': '재생',
       'Pause': '일시 정지',
       'Replay': '다시 재생',
+      'Previous': '이전',
+      'Next': '다음',
       'Skip to review context': '검토 맥락으로 이동',
       'DLY role': 'DLY 역할',
       'Systems record work.': '시스템은 업무를 기록합니다.',
@@ -276,6 +278,8 @@
   const updateControls = () => {
     controls.play.disabled = isPlaying;
     controls.pause.disabled = !isPlaying;
+    controls.previous.disabled = currentIndex === 0;
+    controls.next.disabled = currentIndex === beats.length - 1;
   };
 
   const updateStatus = () => {
@@ -362,6 +366,18 @@
     scheduleNext();
   };
 
+  const previous = () => {
+    pause();
+    setBeat(currentIndex - 1);
+    updateControls();
+  };
+
+  const next = () => {
+    pause();
+    setBeat(currentIndex + 1);
+    updateControls();
+  };
+
   const skipToReview = () => {
     pause();
     setBeat(beats.findIndex(beat => beat.id === 'reviewable-context'));
@@ -371,6 +387,8 @@
   controls.play.addEventListener('click', play);
   controls.pause.addEventListener('click', pause);
   controls.replay.addEventListener('click', replay);
+  controls.previous.addEventListener('click', previous);
+  controls.next.addEventListener('click', next);
   controls.skip.addEventListener('click', skipToReview);
 
   reduceMotion.addEventListener('change', event => {
