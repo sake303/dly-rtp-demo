@@ -117,7 +117,7 @@
       "availableAt": 1,
       "label": "DLY · CONTEXT UPDATE",
       "summary": "Team context may affect the next planned exposure.",
-      "actionLabel": "Review progression context",
+      "actionLabel": "View review context",
       "reviewEvidenceIds": [
         "recent-team-exposure",
         "team-week-context"
