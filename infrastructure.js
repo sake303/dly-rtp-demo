@@ -60,15 +60,15 @@
       'athlete': '선수',
       'time': '시간',
       'session': '세션',
-      'Context ready': '맥락 준비됨',
-      'RTP-017 / Next team exposure needs review': 'RTP-017 / 다음 팀 노출은 검토가 필요합니다',
-      'Planned next exposure': '계획된 다음 노출',
+      'Context ready': '검토할 맥락 정리됨',
+      'RTP-017 / Next team exposure needs review': 'RTP-017 / 다음 팀 훈련 전 검토 필요',
+      'Planned next exposure': '계획된 다음 팀 훈련',
       'Controlled 5v5 · 18 min': '제한된 5대5 · 18분',
       'Illustrative workflow · staff review pending': '예시 워크플로우 · 스태프 검토 대기',
       'Evidence': '근거',
-      'Medical boundary': '메디컬 경계',
+      'Medical boundary': '메디컬 확인 사항',
       'Medical team · Tue 12:18': '메디컬 팀 · 화 12:18',
-      'Recent exposure': '최근 노출',
+      'Recent exposure': '최근 훈련 기록',
       'Controlled 4v4 · 16 min completed': '제한된 4대4 · 16분 완료',
       'Performance system · Tue 11:42': '퍼포먼스 시스템 · 화 11:42',
       'Team requirement': '팀 요구사항',
@@ -145,7 +145,7 @@
     }
     const packetCase = document.querySelector('.packet-case');
     if (packetCase) {
-      packetCase.replaceChildren('RTP-017 / 다음 팀 노출은', document.createElement('br'), '검토가 필요합니다');
+      packetCase.replaceChildren('RTP-017 / 다음 팀 훈련 전', document.createElement('br'), '검토 필요');
     }
     document.querySelectorAll('[aria-label]').forEach(element => {
       const label = element.getAttribute('aria-label');

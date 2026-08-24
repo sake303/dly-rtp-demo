@@ -360,7 +360,7 @@
       left: 50%;
       display: grid;
       width: min(960px, calc(100% - 72px));
-      grid-template-columns: minmax(215px, .85fr) minmax(0, 1.8fr) minmax(140px, .55fr);
+      grid-template-columns: minmax(215px, .85fr) minmax(0, 1.8fr);
       border: 1px solid var(--line-strong);
       background: var(--surface);
       box-shadow: 0 28px 88px rgb(0 5 10 / 36%);
@@ -371,11 +371,9 @@
     }
 
     .packet-plan,
-    .packet-evidence,
-    .dashboard-preview { padding: 24px; }
+    .packet-evidence { min-width: 0; padding: 24px; }
 
-    .packet-plan,
-    .packet-evidence { border-right: 1px solid var(--line); }
+    .packet-plan { border-right: 1px solid var(--line); }
 
     .packet-status { display: grid; gap: 5px; margin: 0 0 28px; }
     .packet-status-product { color: var(--quiet); font-family: var(--mono); font-size: .56rem; letter-spacing: .07em; }
@@ -390,13 +388,6 @@
     .evidence-heading h3 { margin: 6px 0 0; font-size: .82rem; font-weight: 560; letter-spacing: -.015em; line-height: 1.25; }
     .evidence-value { margin: 0; font-size: .78rem; line-height: 1.45; }
     .evidence-time { display: block; margin-top: 15px; color: var(--quiet); font-family: var(--mono); font-size: .56rem; letter-spacing: .05em; }
-
-    .dashboard-preview { display: grid; align-content: space-between; background: var(--surface-raised); }
-    .preview-window { display: grid; min-height: 120px; padding: 12px; border: 1px solid var(--line-strong); background: var(--bg); }
-    .preview-bar { width: 48%; height: 5px; margin-bottom: 16px; background: var(--line-strong); }
-    .preview-row { height: 1px; margin-top: 11px; background: var(--line); }
-    .preview-row.is-accent { width: 72%; background: var(--accent); }
-    .dashboard-preview p { margin: 0; color: var(--quiet); font-family: var(--mono); font-size: .57rem; letter-spacing: .06em; line-height: 1.45; text-transform: uppercase; }
 
     .handoff-screen {
       position: absolute;
@@ -587,8 +578,6 @@
     .stage[data-beat="dashboard-handoff"] .context-packet { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%); visibility: visible; }
     .stage[data-beat="dashboard-handoff"] .context-packet { opacity: 0; pointer-events: none; transform: translate(-50%, -50%) scale(.82); }
     .stage[data-beat="dashboard-handoff"] .handoff-screen { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
-    .stage[data-beat="dashboard-handoff"] .dashboard-preview { box-shadow: inset 0 0 0 1px rgb(91 124 255 / 35%); }
-
     .page-footer {
       display: grid;
       grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -610,8 +599,6 @@
       .source-panel[data-source="performance"] { left: 2%; }
       .source-panel[data-source="history"] { right: 2%; }
       .context-packet { grid-template-columns: minmax(180px, .75fr) minmax(0, 1.45fr); }
-      .dashboard-preview { display: none; }
-      .packet-evidence { border-right: 0; }
     }
 
     @media (max-width: 640px) {
@@ -632,7 +619,7 @@
       .source-panel[data-source="performance"] { order: 3; }
       .source-panel[data-source="team"] { order: 1; }
       .source-panel[data-source="history"] { order: 4; }
-      .context-packet { top: 50%; left: 50%; width: min(960px, calc(100% - 72px)); transform: translate(-50%, calc(-50% + 32px)); }
+      .context-packet { top: 50%; left: 50%; width: calc(100vw - 48px); max-width: calc(100vw - 48px); box-sizing: border-box; transform: translate(-50%, calc(-50% + 32px)); }
       .packet-plan,
       .packet-evidence { padding: 18px; }
       .packet-evidence { grid-template-columns: 1fr; gap: 18px; }
@@ -686,7 +673,7 @@
       body[data-motion-ready="true"] .stage[data-beat="connect-context"] .source-panel::after { right: auto; left: 12px; font-size: .56rem; letter-spacing: .04em; opacity: 1; white-space: nowrap; transform: scale(3.25); transform-origin: left bottom; }
       body[data-motion-ready="true"] .context-packet { grid-template-columns: 1fr; }
       body[data-motion-ready="true"] .context-packet .packet-plan { border-right: 0; border-bottom: 1px solid var(--line); }
-      body[data-motion-ready="true"] .dashboard-preview { display: none; }
+      body[data-motion-ready="true"] .staff-status { display: grid; width: 100%; min-width: 0; box-sizing: border-box; grid-template-columns: minmax(0, 1fr) auto; }
       body[data-motion-ready="true"] .handoff-screen { width: min(760px, calc(100% - 48px)); }
       body[data-motion-ready="true"] .stage[data-beat="reviewable-context"],
       body[data-motion-ready="true"] .stage[data-beat="dashboard-handoff"] { min-height: 860px; }
@@ -838,15 +825,6 @@
           </article>
           <div class="staff-status"><span class="field-label">Staff decision</span><span>Not set</span></div>
         </div>
-        <aside class="dashboard-preview" aria-label="Operational dashboard preview">
-          <div class="preview-window" aria-hidden="true">
-            <span class="preview-bar"></span>
-            <span class="preview-row is-accent"></span>
-            <span class="preview-row"></span>
-            <span class="preview-row"></span>
-          </div>
-          <p>Operational dashboard<br>preview</p>
-        </aside>
       </section>
 
       <section class="handoff-screen" data-motion-role="dashboard-handoff" aria-hidden="true" aria-label="Operational dashboard review entry preview">
