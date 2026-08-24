@@ -18,7 +18,7 @@
       'Illustrative records only.': '예시 기록입니다.',
       'Not a medical recommendation.': '의학적 권고가 아닙니다.',
       'Four systems hold a piece of the same review moment.': '네 시스템이 같은 검토 순간의 일부를 각각 보유합니다.',
-      'Medical context': '메디컬',
+      'Medical': '메디컬',
       'source': '출처',
       'Source': '출처',
       'Medical team': '메디컬 팀',
@@ -27,12 +27,12 @@
       'Practice status': '팀 훈련 참여',
       'Controlled team integration': '제한된 팀 훈련 참여',
       'Restriction': '검토 조건',
-      'Review before uncontrolled 5v5': '제한 없는 5대5 전 검토 필요',
+      'Review required before unrestricted 5v5': '제한 없는 5대5 전 검토 필요',
       'Next review': '다음 확인',
       'Tue · 14:00': '화 · 14:00',
       'staff-entered': '기록 시각',
       'Tue · 12:18': '화 · 12:18',
-      'Performance exposure': '최근 훈련 기록',
+      'Recent training record': '최근 훈련 기록',
       'Performance system': '퍼포먼스 시스템',
       'Session': '훈련 형태',
       'Controlled 4v4': '제한된 4대4',
@@ -56,19 +56,18 @@
       'Next checkpoint': '다음 확인',
       'staff-owned': '작성 시각',
       'No review context yet': '아직 검토 맥락 없음',
-      'Next team exposure needs review.': '다음 팀 훈련 전 검토가 필요합니다.',
+      'Review needed before the next team session.': '다음 팀 훈련 전 검토가 필요합니다.',
       'athlete': '선수',
       'time': '시간',
       'session': '세션',
-      'Context ready': '검토할 맥락 정리됨',
-      'RTP-017 / Next team exposure needs review': 'RTP-017 / 다음 팀 훈련 전 검토 필요',
-      'Planned next exposure': '계획된 다음 팀 훈련',
+      'Review context ready': '검토할 맥락 정리됨',
+      'RTP-017 / Review needed before the next team session': 'RTP-017 / 다음 팀 훈련 전 검토 필요',
+      'Next team session planned': '계획된 다음 팀 훈련',
       'Controlled 5v5 · 18 min': '제한된 5대5 · 18분',
       'Illustrative workflow · staff review pending': '예시 워크플로우 · 스태프 검토 대기',
       'Evidence': '근거',
-      'Medical boundary': '메디컬 확인 사항',
+      'Medical considerations': '메디컬 확인 사항',
       'Medical team · Tue 12:18': '메디컬 팀 · 화 12:18',
-      'Recent exposure': '최근 훈련 기록',
       'Controlled 4v4 · 16 min completed': '제한된 4대4 · 16분 완료',
       'Performance system · Tue 11:42': '퍼포먼스 시스템 · 화 11:42',
       'Team requirement': '팀 요구사항',
@@ -79,11 +78,11 @@
       'Operational dashboard': '운영 대시보드',
       'preview': '미리보기',
       'RTP review': 'RTP 검토',
-      'Review entry': '검토 항목',
+      'Review item': '검토 항목',
       'Staff review pending': '스태프 검토 대기',
       'RTP-017 · Controlled 5v5': 'RTP-017 · 제한된 5대5',
       'Staff review': '스태프 검토',
-      'Attributable evidence attached': '검토 근거',
+      'Review evidence': '검토 근거',
       '3 sources': '출처 3개',
       'Decision': '판단',
       'Play': '재생',
@@ -113,8 +112,8 @@
       teamRequirement: { label: '팀 요구사항', nodeState: '' },
       reviewMoment: { label: '검토 순간', nodeState: '' },
       connectContext: { label: 'DLY가 맥락을 연결', nodeState: '' },
-      reviewableContext: { label: '검토 가능한 맥락', nodeState: '맥락 준비됨' },
-      dashboardHandoff: { label: '대시보드로 전달', nodeState: '맥락 준비됨' }
+      reviewableContext: { label: '검토 가능한 맥락', nodeState: '검토할 맥락 정리됨' },
+      dashboardHandoff: { label: '대시보드로 전달', nodeState: '검토할 맥락 정리됨' }
     }
   };
 
@@ -207,7 +206,7 @@
     },
     {
       id: 'recent-exposure',
-      label: recentExposure?.label ?? 'Recent exposure',
+      label: recentExposure?.label ?? 'Recent training record',
       duration: 4500,
       sources: ['medical', 'performance'],
       nodeState: recentExposure?.nodeState ?? ''
@@ -232,7 +231,7 @@
     },
     {
       id: 'connect-context',
-      label: connectContext?.label ?? 'DLY connects context',
+      label: connectContext?.label ?? 'DLY connects the context',
       duration: 13000,
       sources: ['medical', 'performance', 'team', 'history'],
       nodeState: connectContext?.nodeState ?? '',
@@ -243,10 +242,10 @@
     },
     {
       id: 'reviewable-context',
-      label: reviewableContext?.label ?? 'Reviewable context',
+      label: reviewableContext?.label ?? 'Context ready for review',
       duration: 13000,
       sources: ['medical', 'performance', 'team', 'history'],
-      nodeState: reviewableContext?.nodeState ?? 'Context ready',
+      nodeState: reviewableContext?.nodeState ?? 'Review context ready',
       subphase: {
         after: 8000,
       }
@@ -256,7 +255,7 @@
       label: dashboardHandoff?.label ?? 'Dashboard handoff',
       duration: 7000,
       sources: ['medical', 'performance', 'team', 'history'],
-      nodeState: dashboardHandoff?.nodeState ?? 'Context ready',
+      nodeState: dashboardHandoff?.nodeState ?? 'Review context ready',
       subphase: {
         after: 4000,
       }
