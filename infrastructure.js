@@ -56,7 +56,7 @@
       'Next checkpoint': '다음 확인',
       'staff-owned': '작성 시각',
       'No review context yet': '아직 검토 맥락 없음',
-      'Next team exposure needs review.': '다음 팀 노출은 검토가 필요합니다.',
+      'Next team exposure needs review.': '다음 팀 훈련 전 검토가 필요합니다.',
       'athlete': '선수',
       'time': '시간',
       'session': '세션',
