@@ -83,7 +83,7 @@
       'Staff review pending': '스태프 검토 대기',
       'RTP-017 · Controlled 5v5': 'RTP-017 · 제한된 5대5',
       'Staff review': '스태프 검토',
-      'Attributable evidence attached': '출처 있는 근거 연결됨',
+      'Attributable evidence attached': '검토 근거',
       '3 sources': '출처 3개',
       'Decision': '판단',
       'Play': '재생',
